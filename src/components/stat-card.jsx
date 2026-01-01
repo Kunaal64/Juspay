@@ -2,6 +2,8 @@ import { TrendingUp, TrendingDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 export function StatCard({ title, value, trend, trendUp, variant = "default" }) {
+  const isHex = variant.startsWith('#')
+
   return (
     <div
       className={cn(
@@ -10,6 +12,7 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
         variant === "blue" && "bg-[#E3F5FF] dark:bg-[#A8C5DA]/20",
         variant === "white" && "bg-[#F7F9FB] dark:bg-[#E5ECF6]/10",
       )}
+      style={isHex ? { backgroundColor: variant } : undefined}
     >
       <h3 className={cn(
         "text-[12px] font-medium",

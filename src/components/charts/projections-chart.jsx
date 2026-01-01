@@ -18,12 +18,18 @@ export function ProjectionsChart() {
           <BarChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
             <CartesianGrid strokeDasharray="0" vertical={false} stroke="var(--border)" className="opacity-30" />
             <XAxis
+              xAxisId={0}
               dataKey="name"
               axisLine={false}
               tickLine={false}
               tick={{ fill: "currentColor", fontSize: 11 }}
               className="text-muted-foreground"
               dy={10}
+            />
+            <XAxis
+              xAxisId={1}
+              dataKey="name"
+              hide
             />
             <YAxis
               axisLine={false}
@@ -40,23 +46,32 @@ export function ProjectionsChart() {
                   return (
                     <div className="bg-popover border border-border p-2 rounded-lg text-[12px] shadow-xl text-popover-foreground">
                       <p className="text-muted-foreground">{payload[0].payload.name}</p>
-                      <p className="font-semibold">Actual: {payload[1].value}M</p>
-                      <p className="text-muted-foreground/70">Proj: {payload[0].value}M</p>
+                      <p className="font-semibold">Actual: {payload[1]?.value || payload[0].value}M</p>
+                      <p className="text-muted-foreground/70">Proj: {payload[0]?.value || payload[1].value}M</p>
                     </div>
                   )
                 }
                 return null
               }}
             />
+            {/* Background Bar (Projection) */}
             <Bar
+              xAxisId={1}
               dataKey="projection"
-              stackId="a"
-              fill="currentColor"
-              className="text-muted-foreground/15"
+              fill="rgba(0,0,0,0.1)"
+              className="dark:fill-white/10"
               radius={[4, 4, 0, 0]}
-              barSize={24}
+              barSize={28}
             />
-            <Bar dataKey="actual" stackId="b" fill="#A8C5DA" radius={[4, 4, 0, 0]} barSize={24} />
+            {/* Foreground Bar (Actual) */}
+            <Bar 
+              xAxisId={0}
+              dataKey="actual" 
+              fill="#A8C5DA" 
+              className="text-foreground"
+              radius={[4, 4, 0, 0]} 
+              barSize={28} 
+            />
           </BarChart>
         </ResponsiveContainer>
       </div>
