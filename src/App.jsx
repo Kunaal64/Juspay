@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SidebarLeft } from '@/components/sidebar-left'
 import { SidebarRight } from '@/components/sidebar-right'
@@ -10,20 +10,67 @@ import { RevenueChart } from '@/components/charts/revenue-chart'
 import { SalesDonutChart } from '@/components/charts/sales-donut-chart'
 import { RevenueByLocation } from '@/components/revenue-by-location'
 import { TopProducts } from '@/components/top-products'
+import { cn } from '@/lib/utils'
 
 export default function App() {
   const [leftSidebarVisible, setLeftSidebarVisible] = useState(true)
   const [rightSidebarVisible, setRightSidebarVisible] = useState(true)
   const [view, setView] = useState("overview")
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Handle responsive sidebar state
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 1024
+      setIsMobile(mobile)
+      if (mobile) {
+        setLeftSidebarVisible(false)
+        setRightSidebarVisible(false)
+      } else {
+        setLeftSidebarVisible(true)
+        setRightSidebarVisible(true)
+      }
+    }
+
+    // Set initial state
+    handleResize()
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-      <main className="flex min-h-screen bg-background font-sans antialiased">
-        {leftSidebarVisible && (
-          <SidebarLeft currentView={view} onViewChange={setView} />
+      <main className="flex min-h-screen bg-background font-sans antialiased relative overflow-hidden">
+        {/* Mobile Backdrop for Left Sidebar */}
+        {isMobile && leftSidebarVisible && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden fade-in-0"
+            onClick={() => setLeftSidebarVisible(false)}
+          />
         )}
 
-        <div className="flex-1 flex flex-col min-h-screen overflow-hidden">
+        {/* Left Sidebar Wrapper */}
+        <div className={cn(
+          "shrink-0 bg-background transition-all duration-300 ease-in-out z-50",
+          isMobile 
+            ? "fixed inset-y-0 left-0 h-full shadow-2xl" 
+            : "relative",
+          // Visibility & Width Logic
+          isMobile
+            ? (leftSidebarVisible ? "translate-x-0" : "-translate-x-full")
+            : (leftSidebarVisible ? "w-[212px] translate-x-0" : "w-0 -translate-x-full opacity-0 overflow-hidden")
+        )}>
+          <SidebarLeft 
+            currentView={view} 
+            onViewChange={(v) => {
+              setView(v)
+              if (isMobile) setLeftSidebarVisible(false)
+            }} 
+          />
+        </div>
+
+        <div className="flex-1 flex flex-col min-h-screen overflow-hidden transition-all duration-300">
           <DashboardHeader
             toggleLeftSidebar={() => setLeftSidebarVisible(!leftSidebarVisible)}
             toggleRightSidebar={() => setRightSidebarVisible(!rightSidebarVisible)}
@@ -32,7 +79,7 @@ export default function App() {
 
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {view === "overview" ? (
-              <div className="p-6 space-y-6">
+              <div className="p-4 md:p-6 space-y-6">
                 {/* Row 1: Stat Cards (50%) + Projections Chart (50%) */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Left: 2x2 Stat Cards Grid */}
@@ -43,7 +90,7 @@ export default function App() {
                     <StatCard title="Growth" value="30.1%" trend="+6.08%" trendUp={true} variant="white" />
                   </div>
                   {/* Right: Projections Chart */}
-                  <div className="h-full">
+                  <div className="h-full min-h-[300px] lg:min-h-auto">
                     <ProjectionsChart />
                   </div>
                 </div>
@@ -53,17 +100,17 @@ export default function App() {
                   <div className="lg:col-span-3">
                     <RevenueChart />
                   </div>
-                  <div className="lg:col-span-1">
+                  <div className="lg:col-span-1 h-auto lg:h-[340px]">
                     <RevenueByLocation />
                   </div>
                 </div>
 
                 {/* Row 3: Top Products (75%) + Sales Donut (25%) */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                  <div className="lg:col-span-3">
+                  <div className="lg:col-span-3 overflow-x-auto">
                     <TopProducts />
                   </div>
-                  <div className="lg:col-span-1">
+                  <div className="lg:col-span-1 h-[300px] lg:h-auto">
                     <SalesDonutChart />
                   </div>
                 </div>
@@ -74,7 +121,27 @@ export default function App() {
           </div>
         </div>
 
-        {rightSidebarVisible && <SidebarRight />}
+        {/* Mobile Backdrop for Right Sidebar */}
+        {isMobile && rightSidebarVisible && (
+          <div 
+            className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+            onClick={() => setRightSidebarVisible(false)}
+          />
+        )}
+
+        {/* Right Sidebar Wrapper */}
+        <div className={cn(
+          "shrink-0 bg-background transition-all duration-300 ease-in-out z-50",
+          isMobile 
+            ? "fixed inset-y-0 right-0 h-full shadow-2xl" 
+            : "relative",
+          // Visibility & Width Logic
+          isMobile
+            ? (rightSidebarVisible ? "translate-x-0" : "translate-x-full")
+            : (rightSidebarVisible ? "w-[280px] translate-x-0" : "w-0 translate-x-full opacity-0 overflow-hidden")
+        )}>
+           <SidebarRight />
+        </div>
       </main>
     </ThemeProvider>
   )

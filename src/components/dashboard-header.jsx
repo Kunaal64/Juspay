@@ -5,16 +5,16 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
   const { theme, setTheme } = useTheme()
 
   return (
-    <header className="h-[68px] border-b border-border flex items-center justify-between px-6 shrink-0 bg-background transition-colors">
-      <div className="flex items-center gap-4">
+    <header className="h-[68px] border-b border-border flex items-center justify-between px-4 lg:px-6 shrink-0 bg-background transition-colors">
+      <div className="flex items-center gap-3 lg:gap-4">
         <div className="flex items-center gap-2">
           <button onClick={toggleLeftSidebar} className="p-1 hover:bg-accent rounded-md transition-colors">
-            <SidebarIcon className="w-4 h-4 text-muted-foreground" />
+            <SidebarIcon className="w-5 h-5 text-muted-foreground" />
           </button>
-          <button className="p-1 hover:bg-accent rounded-md transition-colors">
+          <button className="p-1 hover:bg-accent rounded-md transition-colors hidden sm:block">
             <Star className="w-4 h-4 text-muted-foreground/40" />
           </button>
-          <div className="w-4 h-4 flex items-center justify-center">
+          <div className="w-4 h-4 hidden sm:flex items-center justify-center">
             <svg
               width="16"
               height="16"
@@ -34,14 +34,14 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
           </div>
         </div>
         <div className="flex items-center gap-2 text-[14px]">
-          <span className="text-muted-foreground">Dashboards</span>
-          <span className="text-muted-foreground/30">/</span>
+          <span className="text-muted-foreground hidden sm:inline">Dashboards</span>
+          <span className="text-muted-foreground/30 hidden sm:inline">/</span>
           <span className="text-foreground/90 font-medium">{view}</span>
         </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="relative group hidden sm:block">
+      <div className="flex items-center gap-2 lg:gap-4">
+        <div className="relative group hidden md:block">
           <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
             <Search className="w-4 h-4 text-muted-foreground/40" />
           </div>
@@ -58,11 +58,11 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
         <div className="flex items-center gap-1">
           <HeaderIcon
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            icon={theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            icon={theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
           />
-          <HeaderIcon icon={<History className="w-4 h-4" />} />
-          <HeaderIcon icon={<Bell className="w-4 h-4" />} />
-          <HeaderIcon onClick={toggleRightSidebar} icon={<SidebarIcon className="w-4 h-4" />} />
+          <HeaderIcon icon={<History className="w-5 h-5" />} />
+          <HeaderIcon icon={<Bell className="w-5 h-5" />} />
+          <HeaderIcon onClick={toggleRightSidebar} icon={<SidebarIcon className="w-5 h-5" />} />
         </div>
       </div>
     </header>
