@@ -67,15 +67,30 @@ export function OrdersList() {
   const [showSortMenu, setShowSortMenu] = useState(false)
   const [showFilterMenu, setShowFilterMenu] = useState(false)
   const [statusFilters, setStatusFilters] = useState([]) // Array of selected statuses
+  const [searchQuery, setSearchQuery] = useState('') // Search by username
   const itemsPerPage = 10
 
   const STATUS_OPTIONS = ["In Progress", "Complete", "Pending", "Approved", "Rejected"]
 
-  // Filter orders based on status
+  // Filter orders based on status and search
   const filteredOrders = useMemo(() => {
-    if (statusFilters.length === 0) return DUMMY_ORDERS
-    return DUMMY_ORDERS.filter(order => statusFilters.includes(order.status))
-  }, [statusFilters])
+    let orders = DUMMY_ORDERS
+    
+    // Filter by status
+    if (statusFilters.length > 0) {
+      orders = orders.filter(order => statusFilters.includes(order.status))
+    }
+    
+    // Filter by search query (username)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim()
+      orders = orders.filter(order => 
+        order.user.name.toLowerCase().includes(query)
+      )
+    }
+    
+    return orders
+  }, [statusFilters, searchQuery])
 
   // Sort filtered orders based on current sort settings
   const sortedOrders = useMemo(() => {
@@ -304,15 +319,36 @@ export function OrdersList() {
             <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
             <input
               type="text"
-              placeholder="Search"
-              className="bg-transparent border border-border/50 rounded-lg pl-8 pr-3 py-1 text-xs w-40 focus:outline-none focus:border-border transition-all placeholder:text-muted-foreground/50"
+              placeholder="Search by name..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value)
+                setCurrentPage(1) // Reset to first page when searching
+              }}
+              className="bg-transparent border border-border/50 rounded-lg pl-8 pr-3 py-1 text-xs w-44 focus:outline-none focus:border-border transition-all placeholder:text-muted-foreground/50"
             />
+            {searchQuery && (
+              <button
+                onClick={() => { setSearchQuery(''); setCurrentPage(1); }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              >
+                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Filter/Sort indicators */}
-        {(sortField || statusFilters.length > 0) && (
-          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+        {/* Filter/Sort/Search indicators */}
+        {(sortField || statusFilters.length > 0 || searchQuery) && (
+          <div className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap">
+            {searchQuery && (
+              <div className="flex items-center gap-2">
+                <span>Searching:</span>
+                <span className="font-medium text-foreground">"{searchQuery}"</span>
+              </div>
+            )}
             {statusFilters.length > 0 && (
               <div className="flex items-center gap-2">
                 <span>Filtered by:</span>
