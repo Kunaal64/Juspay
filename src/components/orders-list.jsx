@@ -400,9 +400,9 @@ export function OrdersList() {
   const hasActiveFilters = statusFilters.length > 0 || searchQuery || sortField
 
   return (
-    <div className="p-6 space-y-4 animate-in fade-in duration-500">
+    <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 animate-in fade-in duration-500">
       {/* Page Header */}
-      <header className="flex items-center justify-between">
+      <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <h1 className="text-sm font-semibold text-foreground">Order List</h1>
         {sortedOrders.length !== DUMMY_ORDERS.length && (
           <span className="text-xs text-muted-foreground">
@@ -411,10 +411,10 @@ export function OrdersList() {
         )}
       </header>
 
-      <div className="flex flex-col gap-4">
-        {/* Toolbar */}
+      <div className="flex flex-col gap-3 sm:gap-4">
+        {/* Toolbar - responsive: stacked on mobile, row on tablet+ */}
         <div 
-          className="flex items-center justify-between bg-secondary/30 dark:bg-white/5 rounded-lg px-2 py-1.5 border border-border/50"
+          className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-secondary/30 dark:bg-white/5 rounded-lg px-2 py-1.5 border border-border/50"
           role="toolbar"
           aria-label="Order list controls"
         >
@@ -531,8 +531,8 @@ export function OrdersList() {
             </div>
           </div>
           
-          {/* Search Input */}
-          <div className="relative">
+          {/* Search Input - responsive: full width on mobile */}
+          <div className="relative w-full sm:w-auto">
             <Search 
               className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/50" 
               aria-hidden="true" 
@@ -543,7 +543,7 @@ export function OrdersList() {
               value={searchQuery}
               onChange={(e) => handleSearch(e.target.value)}
               aria-label="Search orders by username"
-              className="bg-transparent border border-border/50 rounded-lg pl-8 pr-8 py-1 text-xs w-44 focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all placeholder:text-muted-foreground/50"
+              className="w-full sm:w-44 md:w-52 bg-transparent border border-border/50 rounded-lg pl-8 pr-8 py-1.5 sm:py-1 text-xs focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all placeholder:text-muted-foreground/50"
             />
             {searchQuery && (
               <button
@@ -622,8 +622,8 @@ export function OrdersList() {
                   direction={sortDirection} 
                   onSort={handleSort} 
                 />
-                <th className="px-4 py-3 font-medium">Project</th>
-                <th className="px-4 py-3 font-medium">Address</th>
+                <th className="hidden md:table-cell px-4 py-3 font-medium">Project</th>
+                <th className="hidden lg:table-cell px-4 py-3 font-medium">Address</th>
                 <SortableHeader 
                   field="date" 
                   label="Date" 
@@ -676,8 +676,8 @@ export function OrdersList() {
                         </span>
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-foreground">{order.project}</td>
-                    <td className="px-4 py-3 text-foreground">{order.address}</td>
+                    <td className="hidden md:table-cell px-4 py-3 text-foreground">{order.project}</td>
+                    <td className="hidden lg:table-cell px-4 py-3 text-foreground">{order.address}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2 text-foreground">
                         <Calendar className="w-3.5 h-3.5" aria-hidden="true" />
