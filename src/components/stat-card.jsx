@@ -19,7 +19,10 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
   return (
     <div
       className={cn(
-        "p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden transition-all",
+        "p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden",
+        "transition-all duration-200 ease-out",
+        "hover:shadow-lg hover:-translate-y-0.5 hover:scale-[1.01]",
+        "cursor-default",
         variant === "default" && "bg-secondary/50 border border-border/50",
         variant === "blue" && "bg-[#E3F5FF] dark:bg-[#E3F5FF]",
         variant === "white" && "bg-[#F7F9FB] dark:bg-white/5",

@@ -10,7 +10,7 @@ const products = [
 
 export function TopProducts() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl overflow-hidden border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl overflow-hidden border border-border/50 transition-all duration-200 hover:shadow-md">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Top Selling Products</h3>
       <div className="overflow-x-auto">
         <Table>

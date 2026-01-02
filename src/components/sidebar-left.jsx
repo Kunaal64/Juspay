@@ -15,13 +15,30 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+/**
+ * SidebarLeft - Main navigation sidebar component
+ * 
+ * Features:
+ * - Favorites/Recently tabs for quick access
+ * - Expandable dashboard and pages sections
+ * - Active state indicators
+ * - Keyboard accessible navigation
+ * 
+ * @param {object} props - Component props
+ * @param {string} props.currentView - Currently active view ('overview' | 'order-list')
+ * @param {function} props.onViewChange - Callback when view changes
+ */
 export function SidebarLeft({ currentView = "overview", onViewChange }) {
-  const [favoritesTab, setFavoritesTab] = useState("favorites") // favorites or recently
+  const [favoritesTab, setFavoritesTab] = useState("favorites")
   const [defaultExpanded, setDefaultExpanded] = useState(true)
   const [userProfileExpanded, setUserProfileExpanded] = useState(true)
 
   return (
-    <aside className="w-[212px] h-full border-r border-border flex flex-col py-5 px-4 shrink-0 bg-background transition-colors">
+    <aside 
+      className="w-[212px] h-full border-r border-border flex flex-col py-5 px-4 shrink-0 bg-background transition-colors"
+      role="navigation"
+      aria-label="Main navigation"
+    >
       {/* Logo */}
       <div className="flex items-center gap-2 px-2 mb-6">
         <div className="w-6 h-6 rounded-full bg-foreground flex items-center justify-center">
@@ -146,6 +163,18 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
   )
 }
 
+/**
+ * NavItem - Navigation item component for sidebar
+ * @param {object} props - Component props
+ * @param {React.ReactNode} props.icon - Icon element to display
+ * @param {string} props.label - Navigation item label
+ * @param {boolean} props.active - Whether item is currently active
+ * @param {boolean} props.hasActiveIndicator - Show active indicator bar
+ * @param {boolean} props.expandable - Whether item can be expanded
+ * @param {boolean} props.expanded - Current expansion state
+ * @param {boolean} props.bullet - Show bullet instead of icon
+ * @param {boolean} props.muted - Use muted color for bullet
+ */
 function NavItem({
   icon,
   label,
@@ -155,33 +184,65 @@ function NavItem({
   expanded = false,
   bullet = false,
   muted = false,
+  onClick,
 }) {
   return (
     <div
+      role={expandable ? "button" : "link"}
+      tabIndex={0}
+      aria-expanded={expandable ? expanded : undefined}
+      aria-current={active ? "page" : undefined}
+      onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault()
+          onClick?.()
+        }
+      }}
       className={cn(
-        "group flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all relative hover:bg-[#1C1C1C]/5 dark:hover:bg-white/5",
+        "group flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all relative",
+        "hover:bg-[#1C1C1C]/5 dark:hover:bg-white/5",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
         active ? "text-foreground" : "text-foreground hover:text-foreground",
       )}
     >
       {/* Active indicator bar */}
       {hasActiveIndicator && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-foreground rounded-r" />
+        <div 
+          className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-foreground rounded-r" 
+          aria-hidden="true"
+        />
       )}
       
       {/* Chevron at front for expandable items */}
       {expandable && (
         expanded ? (
-          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
+          <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" aria-hidden="true" />
         ) : (
-          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
+          <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" aria-hidden="true" />
         )
       )}
       
+      {/* Icon or bullet indicator */}
       {bullet ? (
-        <span className={cn("w-1.5 h-1.5 rounded-full", muted ? "bg-muted-foreground" : (active ? "bg-foreground" : "bg-muted-foreground/50"))} />
+        <span 
+          className={cn(
+            "w-1.5 h-1.5 rounded-full", 
+            muted ? "bg-muted-foreground" : (active ? "bg-foreground" : "bg-muted-foreground/50")
+          )} 
+          aria-hidden="true"
+        />
       ) : (
-        icon && <span className={cn(active ? "text-foreground" : "text-foreground")}>{icon}</span>
+        icon && (
+          <span 
+            className={cn(active ? "text-foreground" : "text-foreground")} 
+            aria-hidden="true"
+          >
+            {icon}
+          </span>
+        )
       )}
+      
       <span className={cn("text-[14px]", active && "font-medium")}>{label}</span>
     </div>
   )
