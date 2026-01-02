@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import {
   MoreHorizontal,
   Plus,
@@ -8,6 +8,8 @@ import {
   Calendar,
   ChevronLeft,
   ChevronRight,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -19,58 +21,82 @@ const STATUS_COLORS = {
   Rejected: "text-[#1C1C1C33] dark:text-[#FFFFFF4D]",
 }
 
-const DUMMY_ORDERS = Array.from({ length: 50 }, (_, i) => ({
-  id: `#CM980${(i + 1).toString().padStart(2, "0")}`,
+const FIRST_NAMES = ["Natali", "Kate", "Drew", "Orlando", "Andi", "Koray", "Lana", "Demi", "Candice", "Marcus", "Sophia", "James", "Emma", "Michael", "Olivia", "William", "Ava", "Alexander", "Isabella", "Daniel"]
+const LAST_NAMES = ["Craig", "Morrison", "Cano", "Diggs", "Lane", "Okumus", "Steiner", "Wilkinson", "Wu", "Chen", "Rodriguez", "Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson"]
+const AVATARS = ["/natali.jpg", "/kate.jpg", "/drew.jpg", "/orlando.jpg", "/andi.jpg", "/koray.jpg"]
+const PROJECTS = ["Landing Page", "CRM Admin", "Client Portal", "Admin Dashboard", "Mobile App", "Analytics Suite", "Marketing Platform", "E-commerce Store", "User Research", "Security Audit", "API Integration", "Data Migration", "Design System", "Payment Gateway", "Chat Application"]
+const ADDRESSES = ["Meadow Lane, Oakland", "Market St, San Francisco", "Bagwell Ave, Ocala", "Washburn Dr, Baton Rouge", "Nest Lane, Olivette", "Sunset Blvd, Los Angeles", "Wall St, New York", "Pacific Ave, Seattle", "Main St, Chicago", "Broadway, Austin", "Pine St, Portland", "Oak Ave, Denver", "Maple Dr, Boston", "Cedar Rd, Miami", "Elm St, Phoenix"]
+const DATES = ["Just now", "5 min ago", "15 min ago", "1 hour ago", "3 hours ago", "Yesterday", "2 days ago", "3 days ago", "1 week ago", "Jan 15, 2024", "Jan 10, 2024", "Dec 28, 2023", "Dec 15, 2023", "Nov 30, 2023", "Nov 15, 2023"]
+
+// Date priority for sorting (lower number = more recent)
+const DATE_PRIORITY = {
+  "Just now": 1,
+  "5 min ago": 2,
+  "15 min ago": 3,
+  "1 hour ago": 4,
+  "3 hours ago": 5,
+  "Yesterday": 6,
+  "2 days ago": 7,
+  "3 days ago": 8,
+  "1 week ago": 9,
+  "Jan 15, 2024": 10,
+  "Jan 10, 2024": 11,
+  "Dec 28, 2023": 12,
+  "Dec 15, 2023": 13,
+  "Nov 30, 2023": 14,
+  "Nov 15, 2023": 15,
+}
+
+const DUMMY_ORDERS = Array.from({ length: 70 }, (_, i) => ({
+  id: `#CM${(9800 + i + 1).toString()}`,
   user: {
-    name: [
-      "Natali Craig",
-      "Kate Morrison",
-      "Drew Cano",
-      "Orlando Diggs",
-      "Andi Lane",
-      "Koray Okumus",
-      "Lana Steiner",
-      "Lana Steiner",
-      "Demi Wilkinson",
-      "Candice Wu",
-    ][i % 10],
-    avatar: `/placeholder.svg?height=24&width=24&query=user-${i} avatar`,
+    name: `${FIRST_NAMES[i % 20]} ${LAST_NAMES[(i + 7) % 20]}`,
+    avatar: AVATARS[i % 6],
   },
-  project: [
-    "Landing Page",
-    "CRM Admin pages",
-    "Client Project",
-    "Admin Dashboard",
-    "App Landing Page",
-    "Analytics View",
-    "Marketing Suite",
-    "Product Launch",
-    "User Research",
-    "Security Audit",
-  ][i % 10],
-  address: [
-    "Meadow Lane Oakland",
-    "Larry San Francisco",
-    "Bagwell Avenue Ocala",
-    "Washburn Baton Rouge",
-    "Nest Lane Olivette",
-    "Sunset Blvd Los Angeles",
-    "Wall St New York",
-    "Pacific Ave Seattle",
-    "Main St Chicago",
-    "Broadway Austin",
-  ][i % 10],
-  date: ["Just now", "A minute ago", "1 hour ago", "Yesterday", "Feb 2, 2023", "2 days ago", "1 week ago"][i % 7],
-  status: ["In Progress", "Complete", "Pending", "Approved", "Rejected"][i % 5],
+  project: PROJECTS[(i * 3 + i) % 15],
+  address: ADDRESSES[(i * 2 + 1) % 15],
+  date: DATES[i % 15],
+  status: ["In Progress", "Complete", "Pending", "Approved", "Rejected"][(i * 7) % 5],
 }))
 
 export function OrdersList() {
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedOrders, setSelectedOrders] = useState([])
+  const [sortField, setSortField] = useState(null) // 'username', 'orderId', 'date'
+  const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
+  const [showSortMenu, setShowSortMenu] = useState(false)
   const itemsPerPage = 10
-  const totalPages = Math.ceil(DUMMY_ORDERS.length / itemsPerPage)
 
-  const currentOrders = DUMMY_ORDERS.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
+  // Sort orders based on current sort settings
+  const sortedOrders = useMemo(() => {
+    if (!sortField) return DUMMY_ORDERS
+
+    return [...DUMMY_ORDERS].sort((a, b) => {
+      let comparison = 0
+
+      switch (sortField) {
+        case 'username':
+          comparison = a.user.name.localeCompare(b.user.name)
+          break
+        case 'orderId':
+          // Extract numeric part for proper sorting
+          const numA = parseInt(a.id.replace('#CM', ''))
+          const numB = parseInt(b.id.replace('#CM', ''))
+          comparison = numA - numB
+          break
+        case 'date':
+          comparison = (DATE_PRIORITY[a.date] || 99) - (DATE_PRIORITY[b.date] || 99)
+          break
+        default:
+          comparison = 0
+      }
+
+      return sortDirection === 'asc' ? comparison : -comparison
+    })
+  }, [sortField, sortDirection])
+
+  const totalPages = Math.ceil(sortedOrders.length / itemsPerPage)
+  const currentOrders = sortedOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
 
   const toggleSelectAll = () => {
     if (selectedOrders.length === currentOrders.length) {
@@ -84,6 +110,26 @@ export function OrdersList() {
     setSelectedOrders((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]))
   }
 
+  const handleSort = (field) => {
+    if (sortField === field) {
+      // Toggle direction if same field
+      setSortDirection(prev => prev === 'asc' ? 'desc' : 'asc')
+    } else {
+      // New field, start with ascending
+      setSortField(field)
+      setSortDirection('asc')
+    }
+    setCurrentPage(1) // Reset to first page when sorting
+    setShowSortMenu(false)
+  }
+
+  const clearSort = () => {
+    setSortField(null)
+    setSortDirection('asc')
+    setCurrentPage(1)
+    setShowSortMenu(false)
+  }
+
   return (
     <div className="p-6 space-y-4 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
@@ -92,31 +138,113 @@ export function OrdersList() {
 
       <div className="flex flex-col gap-4">
         {/* Toolbar */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <button className="p-2 hover:bg-accent rounded-lg text-muted-foreground transition-colors">
+        <div className="flex items-center justify-between bg-secondary/30 dark:bg-white/5 rounded-lg px-2 py-1.5 border border-border/50">
+          <div className="flex items-center gap-0.5">
+            <button className="p-1.5 hover:bg-accent rounded text-foreground/70 transition-colors">
               <Plus className="w-4 h-4" />
             </button>
-            <button className="p-2 hover:bg-accent rounded-lg text-muted-foreground transition-colors">
+            <button className="p-1.5 hover:bg-accent rounded text-foreground/70 transition-colors">
               <ListFilter className="w-4 h-4" />
             </button>
-            <button className="p-2 hover:bg-accent rounded-lg text-muted-foreground transition-colors">
-              <ArrowUpDown className="w-4 h-4" />
-            </button>
+            {/* Sort Button with Dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => setShowSortMenu(!showSortMenu)}
+                className={cn(
+                  "p-1.5 hover:bg-accent rounded transition-colors",
+                  sortField ? "text-foreground bg-accent" : "text-foreground/70"
+                )}
+              >
+                <ArrowUpDown className="w-4 h-4" />
+              </button>
+              
+              {/* Sort Dropdown Menu */}
+              {showSortMenu && (
+                <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-lg shadow-xl z-50 min-w-[180px] py-1">
+                  <div className="px-3 py-1.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+                    Sort by
+                  </div>
+                  
+                  <button
+                    onClick={() => handleSort('username')}
+                    className={cn(
+                      "w-full px-3 py-2 text-xs text-left flex items-center justify-between hover:bg-accent transition-colors",
+                      sortField === 'username' && "bg-accent/50"
+                    )}
+                  >
+                    <span>Username</span>
+                    {sortField === 'username' && (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    )}
+                  </button>
+                  
+                  <button
+                    onClick={() => handleSort('orderId')}
+                    className={cn(
+                      "w-full px-3 py-2 text-xs text-left flex items-center justify-between hover:bg-accent transition-colors",
+                      sortField === 'orderId' && "bg-accent/50"
+                    )}
+                  >
+                    <span>Order ID</span>
+                    {sortField === 'orderId' && (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    )}
+                  </button>
+                  
+                  <button
+                    onClick={() => handleSort('date')}
+                    className={cn(
+                      "w-full px-3 py-2 text-xs text-left flex items-center justify-between hover:bg-accent transition-colors",
+                      sortField === 'date' && "bg-accent/50"
+                    )}
+                  >
+                    <span>Date</span>
+                    {sortField === 'date' && (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    )}
+                  </button>
+                  
+                  {sortField && (
+                    <>
+                      <div className="border-t border-border my-1" />
+                      <button
+                        onClick={clearSort}
+                        className="w-full px-3 py-2 text-xs text-left text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                      >
+                        Clear sort
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
-          <div className="relative group">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors" />
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/50" />
             <input
               type="text"
               placeholder="Search"
-              className="bg-transparent border border-border rounded-lg pl-9 pr-4 py-1.5 text-sm w-56 focus:outline-none focus:ring-1 focus:ring-ring transition-all placeholder:text-muted-foreground/50"
+              className="bg-transparent border border-border/50 rounded-lg pl-8 pr-3 py-1 text-xs w-40 focus:outline-none focus:border-border transition-all placeholder:text-muted-foreground/50"
             />
           </div>
         </div>
 
+        {/* Sort indicator */}
+        {sortField && (
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span>Sorted by:</span>
+            <span className="font-medium text-foreground capitalize">
+              {sortField === 'orderId' ? 'Order ID' : sortField}
+            </span>
+            <span className="text-muted-foreground">
+              ({sortDirection === 'asc' ? 'A-Z' : 'Z-A'})
+            </span>
+          </div>
+        )}
+
         {/* Table */}
-        <div className="overflow-x-auto rounded-xl border border-border">
-          <table className="w-full text-sm text-left border-collapse">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="border-b border-border text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
                 <th className="px-4 py-3 w-10">
@@ -127,11 +255,41 @@ export function OrdersList() {
                     className="w-4 h-4 rounded border-border bg-transparent accent-[#A8C5DA]"
                   />
                 </th>
-                <th className="px-4 py-3 font-medium">Order ID</th>
-                <th className="px-4 py-3 font-medium">User</th>
+                <th 
+                  className="px-4 py-3 font-medium cursor-pointer hover:text-foreground transition-colors"
+                  onClick={() => handleSort('orderId')}
+                >
+                  <div className="flex items-center gap-1">
+                    Order ID
+                    {sortField === 'orderId' && (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    )}
+                  </div>
+                </th>
+                <th 
+                  className="px-4 py-3 font-medium cursor-pointer hover:text-foreground transition-colors"
+                  onClick={() => handleSort('username')}
+                >
+                  <div className="flex items-center gap-1">
+                    User
+                    {sortField === 'username' && (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    )}
+                  </div>
+                </th>
                 <th className="px-4 py-3 font-medium">Project</th>
                 <th className="px-4 py-3 font-medium">Address</th>
-                <th className="px-4 py-3 font-medium">Date</th>
+                <th 
+                  className="px-4 py-3 font-medium cursor-pointer hover:text-foreground transition-colors"
+                  onClick={() => handleSort('date')}
+                >
+                  <div className="flex items-center gap-1">
+                    Date
+                    {sortField === 'date' && (
+                      sortDirection === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                    )}
+                  </div>
+                </th>
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 w-10"></th>
               </tr>
@@ -141,8 +299,8 @@ export function OrdersList() {
                 <tr
                   key={order.id}
                   className={cn(
-                    "hover:bg-accent/30 transition-colors group",
-                    selectedOrders.includes(order.id) && "bg-accent/20",
+                    "hover:bg-[#F7F9FB] dark:hover:bg-white/5 transition-colors group",
+                    selectedOrders.includes(order.id) && "bg-[#F7F9FB] dark:bg-white/5",
                   )}
                 >
                   <td className="px-4 py-3">
@@ -155,13 +313,13 @@ export function OrdersList() {
                   </td>
                   <td className="px-4 py-3 text-foreground">{order.id}</td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 whitespace-nowrap">
                       <img
                         src={order.user.avatar || "/placeholder.svg"}
                         alt=""
-                        className="w-6 h-6 rounded-full bg-accent"
+                        className="w-5 h-5 rounded-full bg-accent"
                       />
-                      <span className="font-medium text-foreground">{order.user.name}</span>
+                      <span className="font-medium text-foreground text-[11px]">{order.user.name}</span>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-foreground">{order.project}</td>
@@ -219,6 +377,14 @@ export function OrdersList() {
           </button>
         </div>
       </div>
+
+      {/* Click outside to close sort menu */}
+      {showSortMenu && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setShowSortMenu(false)}
+        />
+      )}
     </div>
   )
 }

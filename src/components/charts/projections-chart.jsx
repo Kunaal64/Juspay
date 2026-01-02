@@ -16,7 +16,7 @@ export function ProjectionsChart() {
       <div className="flex-1 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="0" vertical={false} stroke="rgba(0,0,0,0.05)" />
+            <CartesianGrid strokeDasharray="0" vertical={false} stroke="currentColor" strokeOpacity={0.08} />
             <XAxis
               xAxisId={0}
               dataKey="name"

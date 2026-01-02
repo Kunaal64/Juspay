@@ -88,9 +88,9 @@ export default function App() {
                   {/* Left: 2x2 Stat Cards Grid */}
                   <div className="grid grid-cols-2 gap-4">
                     <StatCard title="Customers" value="3,781" trend="+11.01%" trendUp={true} variant="blue" />
-                    <StatCard title="Orders" value="1,219" trend="-0.03%" trendUp={false} variant="#F7F9FB" />
-                    <StatCard title="Revenue" value="$695" trend="+15.03%" trendUp={true} variant="#F7F9FB" />
-                    <StatCard title="Growth" value="30.1%" trend="+6.08%" trendUp={true} variant="#E5ECF6" />
+                    <StatCard title="Orders"  value="1,219" trend="-0.03%" trendUp={false} variant="#F7F9FB" />
+                    <StatCard title="Revenue"  value="$695" trend="+15.03%" trendUp={true} variant="#F7F9FB" />
+                    <StatCard title="Growth"  value="30.1%" trend="+6.08%" trendUp={true} variant="#E5ECF6" />
                   </div>
                   {/* Right: Projections Chart */}
                   <div className="h-full min-h-[300px] lg:min-h-auto">

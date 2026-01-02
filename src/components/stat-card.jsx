@@ -27,7 +27,7 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
       )}
     >
       <h3 className={cn(
-        "text-[14px] font-medium",
+        "text-[14px] font-bold",
         variant === "default" ? "text-muted-foreground" : "text-foreground/80",
         needsBlackTextInDark && "dark:text-black/80"
       )}>
@@ -42,7 +42,7 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
         </span>
         <div className="flex items-center gap-1.5 mb-1">
           <span className={cn(
-            "text-[12px] font-medium text-foreground/60",
+            "text-[12px] font-bold text-foreground/60",
             needsBlackTextInDark && "dark:text-black/60"
           )}>
             {trend}
