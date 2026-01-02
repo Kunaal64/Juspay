@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Bug, UserPlus, Radio } from "lucide-react"
 
 const activities = [
   { id: 1, avatar: "/natali.jpg", label: "You have a bug that needs...", time: "Just now" },
@@ -13,17 +14,17 @@ export function SidebarRight() {
     <aside className="w-[280px] h-full border-l border-border flex flex-col py-5 px-5 shrink-0 bg-background overflow-y-auto custom-scrollbar transition-colors">
       <div className="space-y-6">
         <section>
-          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-4">Notifications</h3>
+          <h3 className="text-[11px] font-medium text-foreground font-bold uppercase tracking-wider mb-4">Notifications</h3>
           <div className="space-y-4">
-            <NotificationItem icon="🐞" label="You have a bug that needs..." time="Just now" />
-            <NotificationItem icon="👤" label="New user registered" time="59 minutes ago" />
-            <NotificationItem icon="🐞" label="You have a bug that needs..." time="12 hours ago" />
-            <NotificationItem icon="📡" label="Andi Lane subscribed to you" time="Today, 11:59 AM" />
+            <NotificationItem icon={<Bug className="w-3.5 h-3.5" />} bg="#E3F5FF" label="You have a bug that needs..." time="Just now" />
+            <NotificationItem icon={<UserPlus className="w-3.5 h-3.5" />} bg="#E5ECF6" label="New user registered" time="59 minutes ago" />
+            <NotificationItem icon={<Bug className="w-3.5 h-3.5" />} bg="#E3F5FF" label="You have a bug that needs..." time="12 hours ago" />
+            <NotificationItem icon={<Radio className="w-3.5 h-3.5" />} bg="#E5ECF6" label="Andi Lane subscribed to you" time="Today, 11:59 AM" />
           </div>
         </section>
 
         <section>
-          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-4">Activities</h3>
+          <h3 className="text-[11px] font-medium text-foreground font-bold uppercase tracking-wider mb-4">Activities</h3>
           <div className="space-y-4">
             {activities.map((activity) => (
               <ActivityItem key={activity.id} avatar={activity.avatar} label={activity.label} time={activity.time} />
@@ -32,7 +33,7 @@ export function SidebarRight() {
         </section>
 
         <section>
-          <h3 className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider mb-4">Contacts</h3>
+          <h3 className="text-[11px] font-medium text-foreground font-bold uppercase tracking-wider mb-4">Contacts</h3>
           <div className="space-y-3">
             <ContactItem avatar="/natali.jpg" name="Natali Craig" />
             <ContactItem avatar="/drew.jpg" name="Drew Cano" />
@@ -47,11 +48,14 @@ export function SidebarRight() {
   )
 }
 
-function NotificationItem({ icon, label, time }) {
+function NotificationItem({ icon, bg = "#E3F5FF", label, time }) {
   return (
     <div className="flex gap-3">
-      <div className="w-6 h-6 rounded-lg bg-secondary flex items-center justify-center shrink-0">
-        <span className="text-[12px]">{icon}</span>
+      <div 
+        className="w-6 h-6 rounded-lg flex items-center justify-center shrink-0 text-black"
+        style={{ backgroundColor: bg }}
+      >
+        {icon}
       </div>
       <div className="flex flex-col min-w-0">
         <span className="text-[12px] text-foreground/80 truncate leading-tight">{label}</span>
