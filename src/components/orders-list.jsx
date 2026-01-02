@@ -65,13 +65,23 @@ export function OrdersList() {
   const [sortField, setSortField] = useState(null) // 'username', 'orderId', 'date'
   const [sortDirection, setSortDirection] = useState('asc') // 'asc' or 'desc'
   const [showSortMenu, setShowSortMenu] = useState(false)
+  const [showFilterMenu, setShowFilterMenu] = useState(false)
+  const [statusFilters, setStatusFilters] = useState([]) // Array of selected statuses
   const itemsPerPage = 10
 
-  // Sort orders based on current sort settings
-  const sortedOrders = useMemo(() => {
-    if (!sortField) return DUMMY_ORDERS
+  const STATUS_OPTIONS = ["In Progress", "Complete", "Pending", "Approved", "Rejected"]
 
-    return [...DUMMY_ORDERS].sort((a, b) => {
+  // Filter orders based on status
+  const filteredOrders = useMemo(() => {
+    if (statusFilters.length === 0) return DUMMY_ORDERS
+    return DUMMY_ORDERS.filter(order => statusFilters.includes(order.status))
+  }, [statusFilters])
+
+  // Sort filtered orders based on current sort settings
+  const sortedOrders = useMemo(() => {
+    if (!sortField) return filteredOrders
+
+    return [...filteredOrders].sort((a, b) => {
       let comparison = 0
 
       switch (sortField) {
@@ -93,7 +103,7 @@ export function OrdersList() {
 
       return sortDirection === 'asc' ? comparison : -comparison
     })
-  }, [sortField, sortDirection])
+  }, [sortField, sortDirection, filteredOrders])
 
   const totalPages = Math.ceil(sortedOrders.length / itemsPerPage)
   const currentOrders = sortedOrders.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
@@ -130,6 +140,21 @@ export function OrdersList() {
     setShowSortMenu(false)
   }
 
+  const toggleStatusFilter = (status) => {
+    setStatusFilters(prev => 
+      prev.includes(status) 
+        ? prev.filter(s => s !== status)
+        : [...prev, status]
+    )
+    setCurrentPage(1) // Reset to first page when filtering
+  }
+
+  const clearFilters = () => {
+    setStatusFilters([])
+    setCurrentPage(1)
+    setShowFilterMenu(false)
+  }
+
   return (
     <div className="p-6 space-y-4 animate-in fade-in duration-500">
       <div className="flex items-center justify-between">
@@ -143,13 +168,69 @@ export function OrdersList() {
             <button className="p-1.5 hover:bg-accent rounded text-foreground/70 transition-colors">
               <Plus className="w-4 h-4" />
             </button>
-            <button className="p-1.5 hover:bg-accent rounded text-foreground/70 transition-colors">
-              <ListFilter className="w-4 h-4" />
-            </button>
+            {/* Filter Button with Dropdown */}
+            <div className="relative">
+              <button 
+                onClick={() => { setShowFilterMenu(!showFilterMenu); setShowSortMenu(false); }}
+                className={cn(
+                  "p-1.5 hover:bg-accent rounded transition-colors",
+                  statusFilters.length > 0 ? "text-foreground bg-accent" : "text-foreground/70"
+                )}
+              >
+                <ListFilter className="w-4 h-4" />
+              </button>
+              
+              {/* Filter Dropdown Menu */}
+              {showFilterMenu && (
+                <div className="absolute top-full left-0 mt-1 bg-popover border border-border rounded-lg shadow-xl z-50 min-w-[180px] py-1">
+                  <div className="px-3 py-1.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+                    Filter by Status
+                  </div>
+                  
+                  {STATUS_OPTIONS.map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => toggleStatusFilter(status)}
+                      className={cn(
+                        "w-full px-3 py-2 text-xs text-left flex items-center gap-2 hover:bg-accent transition-colors",
+                        statusFilters.includes(status) && "bg-accent/50"
+                      )}
+                    >
+                      <div className={cn(
+                        "w-3 h-3 rounded border border-border flex items-center justify-center",
+                        statusFilters.includes(status) && "bg-foreground border-foreground"
+                      )}>
+                        {statusFilters.includes(status) && (
+                          <svg className="w-2 h-2 text-background" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className={cn("w-1.5 h-1.5 rounded-full", STATUS_COLORS[status].replace('text-', 'bg-'))} />
+                        <span>{status}</span>
+                      </div>
+                    </button>
+                  ))}
+                  
+                  {statusFilters.length > 0 && (
+                    <>
+                      <div className="border-t border-border my-1" />
+                      <button
+                        onClick={clearFilters}
+                        className="w-full px-3 py-2 text-xs text-left text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+                      >
+                        Clear filters
+                      </button>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
             {/* Sort Button with Dropdown */}
             <div className="relative">
               <button 
-                onClick={() => setShowSortMenu(!showSortMenu)}
+                onClick={() => { setShowSortMenu(!showSortMenu); setShowFilterMenu(false); }}
                 className={cn(
                   "p-1.5 hover:bg-accent rounded transition-colors",
                   sortField ? "text-foreground bg-accent" : "text-foreground/70"
@@ -229,16 +310,33 @@ export function OrdersList() {
           </div>
         </div>
 
-        {/* Sort indicator */}
-        {sortField && (
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <span>Sorted by:</span>
-            <span className="font-medium text-foreground capitalize">
-              {sortField === 'orderId' ? 'Order ID' : sortField}
-            </span>
-            <span className="text-muted-foreground">
-              ({sortDirection === 'asc' ? 'A-Z' : 'Z-A'})
-            </span>
+        {/* Filter/Sort indicators */}
+        {(sortField || statusFilters.length > 0) && (
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            {statusFilters.length > 0 && (
+              <div className="flex items-center gap-2">
+                <span>Filtered by:</span>
+                <div className="flex items-center gap-1">
+                  {statusFilters.map((status, index) => (
+                    <span key={status} className="font-medium text-foreground">
+                      {status}{index < statusFilters.length - 1 ? ',' : ''}
+                    </span>
+                  ))}
+                </div>
+                <span className="text-muted-foreground">({filteredOrders.length} orders)</span>
+              </div>
+            )}
+            {sortField && (
+              <div className="flex items-center gap-2">
+                <span>Sorted by:</span>
+                <span className="font-medium text-foreground capitalize">
+                  {sortField === 'orderId' ? 'Order ID' : sortField}
+                </span>
+                <span className="text-muted-foreground">
+                  ({sortDirection === 'asc' ? 'A-Z' : 'Z-A'})
+                </span>
+              </div>
+            )}
           </div>
         )}
 
@@ -378,11 +476,11 @@ export function OrdersList() {
         </div>
       </div>
 
-      {/* Click outside to close sort menu */}
-      {showSortMenu && (
+      {/* Click outside to close menus */}
+      {(showSortMenu || showFilterMenu) && (
         <div 
           className="fixed inset-0 z-40" 
-          onClick={() => setShowSortMenu(false)}
+          onClick={() => { setShowSortMenu(false); setShowFilterMenu(false); }}
         />
       )}
     </div>
