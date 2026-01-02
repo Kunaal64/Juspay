@@ -596,7 +596,7 @@ export function OrdersList() {
 
         {/* Orders Table */}
         <div className="overflow-x-auto" role="region" aria-label="Orders table">
-          <table className="w-full text-xs text-left border-collapse">
+          <table className="w-full text-sm text-left border-collapse">
             <thead>
               <tr className="border-b border-border text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
                 <th className="px-4 py-3 w-10">
