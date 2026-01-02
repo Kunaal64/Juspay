@@ -80,6 +80,9 @@ export default function App() {
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {view === "overview" ? (
               <div className="p-4 md:p-6 space-y-6">
+                {/* Section Title */}
+                <h1 className="text-l font-semibold text-foreground">eCommerce</h1>
+                
                 {/* Row 1: Stat Cards (50%) + Projections Chart (50%) */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   {/* Left: 2x2 Stat Cards Grid */}

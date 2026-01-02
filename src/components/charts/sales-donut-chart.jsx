@@ -9,7 +9,7 @@ const data = [
 
 export function SalesDonutChart() {
   return (
-    <div className="bg-secondary/30 dark:bg-secondary/20 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Total Sales</h3>
       <div className="flex-1 flex flex-col items-center justify-between">
         <div className="relative w-[140px] h-[140px] mb-4">

@@ -7,7 +7,7 @@ export function RevenueByLocation() {
   ]
 
   return (
-    <div className="bg-secondary/30 dark:bg-secondary/20 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Revenue by Location</h3>
       <div className="flex-1 flex flex-col justify-between">
         {/* World Map Image */}

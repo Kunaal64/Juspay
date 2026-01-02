@@ -11,7 +11,7 @@ const data = [
 
 export function RevenueChart() {
   return (
-    <div className="bg-secondary/30 dark:bg-secondary/20 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-4">
         <h3 className="text-[14px] font-semibold text-foreground">Revenue</h3>
         <div className="flex items-center gap-4 flex-wrap">
@@ -32,7 +32,7 @@ export function RevenueChart() {
       <div className="flex-1 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="0" vertical={false} stroke="var(--border)" className="opacity-30" />
+            <CartesianGrid strokeDasharray="0" vertical={false} stroke="rgba(0,0,0,0.05)" />
             <XAxis
               dataKey="name"
               axisLine={false}

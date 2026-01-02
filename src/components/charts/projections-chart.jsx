@@ -11,7 +11,7 @@ const data = [
 
 export function ProjectionsChart() {
   return (
-    <div className="bg-secondary/30 dark:bg-secondary/20 p-5 rounded-2xl h-full min-h-[220px] flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-full min-h-[220px] flex flex-col border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Projections vs Actuals</h3>
       <div className="flex-1 w-full">
         <ResponsiveContainer width="100%" height="100%">
