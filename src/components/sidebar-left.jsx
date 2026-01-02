@@ -44,7 +44,7 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
 
         {/* Dashboards Section */}
         <section>
-          <h3 className="px-2 mb-2 text-[11px] font-medium text-muted-foreground uppercase tracking-wider">
+          <h3 className="px-2 mb-2 text-[11px] font-medium text-foreground uppercase tracking-wider">
             Dashboards
           </h3>
           <nav className="space-y-0.5">
@@ -65,7 +65,7 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
                     "px-3 py-1.5 text-sm rounded-lg cursor-pointer transition-colors",
                     currentView === "overview"
                       ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                      : "text-foreground hover:text-foreground",
                   )}
                 >
                   Overview
@@ -76,7 +76,7 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
                     "px-3 py-1.5 text-sm rounded-lg cursor-pointer transition-colors",
                     currentView === "order-list"
                       ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground",
+                      : "text-foreground hover:text-foreground",
                   )}
                 >
                   Order List
@@ -91,7 +91,7 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
 
         {/* Pages Section */}
         <section>
-          <h3 className="px-2 mb-2 text-[11px] font-medium text-muted-foreground uppercase tracking-wider">Pages</h3>
+          <h3 className="px-2 mb-2 text-[11px] font-medium text-foreground uppercase tracking-wider">Pages</h3>
           <nav className="space-y-0.5">
             {/* User Profile with dropdown */}
             <div onClick={() => setUserProfileExpanded(!userProfileExpanded)}>
@@ -107,7 +107,7 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
                 {["Overview", "Projects", "Campaigns", "Documents", "Followers"].map((sub) => (
                   <div
                     key={sub}
-                    className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground rounded-lg cursor-pointer transition-colors"
+                    className="px-3 py-1.5 text-sm text-foreground hover:text-foreground rounded-lg cursor-pointer transition-colors"
                   >
                     {sub}
                   </div>
@@ -137,21 +137,21 @@ function NavItem({
     <div
       className={cn(
         "group flex items-center justify-between px-2 py-1.5 rounded-lg cursor-pointer transition-all",
-        active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+        active ? "text-foreground" : "text-foreground hover:text-foreground",
       )}
     >
       <div className="flex items-center gap-2">
         {bullet ? (
-          <span className={cn("w-1.5 h-1.5 rounded-full", active ? "bg-foreground" : "bg-muted-foreground/40")} />
+          <span className={cn("w-1.5 h-1.5 rounded-full", active ? "bg-foreground" : "bg-foreground/40")} />
         ) : (
-          icon && <span className={cn(active ? "text-foreground" : "text-muted-foreground/60")}>{icon}</span>
+          icon && <span className={cn(active ? "text-foreground" : "text-foreground/60")}>{icon}</span>
         )}
         <span className="text-sm font-medium">{label}</span>
       </div>
       {expandable && (
         <ChevronRight
           className={cn(
-            "w-3.5 h-3.5 transition-transform duration-200 text-muted-foreground/40",
+            "w-3.5 h-3.5 transition-transform duration-200 text-foreground/40",
             expanded ? "rotate-90 text-foreground" : "",
           )}
         />

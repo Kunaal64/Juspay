@@ -11,12 +11,12 @@ const data = [
 
 export function ProjectionsChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-full min-h-[220px] flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full min-h-[220px] flex flex-col border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Projections vs Actuals</h3>
       <div className="flex-1 w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="0" vertical={false} stroke="var(--border)" className="opacity-30" />
+            <CartesianGrid strokeDasharray="0" vertical={false} stroke="rgba(0,0,0,0.05)" />
             <XAxis
               xAxisId={0}
               dataKey="name"

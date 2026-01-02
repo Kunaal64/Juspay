@@ -105,7 +105,7 @@ export function OrdersList() {
             </button>
           </div>
           <div className="relative group">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-hover:text-foreground transition-colors" />
+            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors" />
             <input
               type="text"
               placeholder="Search"
@@ -153,7 +153,7 @@ export function OrdersList() {
                       className="w-4 h-4 rounded border-border bg-transparent accent-[#A8C5DA]"
                     />
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">{order.id}</td>
+                  <td className="px-4 py-3 text-foreground">{order.id}</td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <img
@@ -164,10 +164,10 @@ export function OrdersList() {
                       <span className="font-medium text-foreground">{order.user.name}</span>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-muted-foreground">{order.project}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{order.address}</td>
+                  <td className="px-4 py-3 text-foreground">{order.project}</td>
+                  <td className="px-4 py-3 text-foreground">{order.address}</td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-2 text-muted-foreground">
+                    <div className="flex items-center gap-2 text-foreground">
                       <Calendar className="w-3.5 h-3.5" />
                       <span>{order.date}</span>
                     </div>

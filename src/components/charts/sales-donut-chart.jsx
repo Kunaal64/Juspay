@@ -1,7 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts"
 
 const data = [
-  { name: "Direct", value: 300.56, stroke: "#1C1C1C" },
+  { name: "Direct", value: 300.56, stroke: "#C6C7F8" },
   { name: "Affiliate", value: 135.18, stroke: "#BAEDBD" },
   { name: "Sponsored", value: 154.02, stroke: "#95A4FC" },
   { name: "E-mail", value: 48.96, stroke: "#B1E3FF" },
@@ -9,7 +9,7 @@ const data = [
 
 export function SalesDonutChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Total Sales</h3>
       <div className="flex-1 flex flex-col items-center justify-between">
         <div className="relative w-[140px] h-[140px] mb-4">
@@ -34,7 +34,7 @@ export function SalesDonutChart() {
                 content={({ active, payload }) => {
                   if (active && payload && payload.length) {
                     return (
-                      <div className="bg-primary text-primary-foreground border-none px-3 py-1.5 rounded-lg text-xs shadow-xl">
+                      <div className="bg-primary text-primary-foreground border-none px-3 py-1.5 rounded-lg text-xs shadow-xl ">
                         <span className="font-medium">{((payload[0].value / 638.72) * 100).toFixed(1)}%</span>
                       </div>
                     )

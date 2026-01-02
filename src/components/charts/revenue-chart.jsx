@@ -11,7 +11,7 @@ const data = [
 
 export function RevenueChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-colors">
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-4">
         <h3 className="text-[14px] font-semibold text-foreground">Revenue</h3>
         <div className="flex items-center gap-4 flex-wrap">

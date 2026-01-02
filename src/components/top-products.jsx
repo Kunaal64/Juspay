@@ -10,7 +10,7 @@ const products = [
 
 export function TopProducts() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/10 p-5 rounded-2xl overflow-hidden border border-border/50 transition-colors">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl overflow-hidden border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Top Selling Products</h3>
       <div className="overflow-x-auto">
         <Table>
@@ -32,9 +32,9 @@ export function TopProducts() {
                 <TableCell className="text-[12px] text-foreground font-medium py-3 border-none">
                   {product.name}
                 </TableCell>
-                <TableCell className="text-[12px] text-muted-foreground py-3 border-none">{product.price}</TableCell>
-                <TableCell className="text-[12px] text-muted-foreground py-3 border-none">{product.quantity}</TableCell>
-                <TableCell className="text-[12px] text-muted-foreground py-3 border-none">{product.amount}</TableCell>
+                <TableCell className="text-[12px] text-foreground py-3 border-none">{product.price}</TableCell>
+                <TableCell className="text-[12px] text-foreground py-3 border-none">{product.quantity}</TableCell>
+                <TableCell className="text-[12px] text-foreground py-3 border-none">{product.amount}</TableCell>
               </TableRow>
             ))}
           </TableBody>
