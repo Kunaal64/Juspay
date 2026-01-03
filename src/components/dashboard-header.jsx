@@ -1,11 +1,14 @@
 import { Search, Bell, History, SidebarIcon, Sun, Moon, Star } from "lucide-react"
 import { useTheme } from "next-themes"
 
+// Top navigation bar with breadcrumbs, theme toggle, and sidebar controls
 export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = "Default" }) {
   const { theme, setTheme } = useTheme()
 
   return (
     <header className="h-[68px] border-b border-border flex items-center justify-between px-4 lg:px-6 shrink-0 bg-background transition-colors">
+      
+      {/* Sidebar Toggle & Breadcrumbs */}
       <div className="flex items-center gap-3 lg:gap-4">
         <div className="flex items-center gap-2">
           <button onClick={toggleLeftSidebar} className="p-1 hover:bg-accent rounded-md transition-colors">
@@ -14,6 +17,7 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
           <button className="p-1 hover:bg-accent rounded-md transition-colors hidden sm:block">
             <Star className="w-4 h-4 text-foreground/40" />
           </button>
+          
           <div className="w-4 h-4 hidden sm:flex items-center justify-center">
             <svg
               width="16"
@@ -33,6 +37,7 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
             </svg>
           </div>
         </div>
+        
         <div className="flex items-center gap-2 text-[14px]">
           <span className="text-muted-foreground hidden sm:inline">Dashboards</span>
           <span className="text-muted-foreground/30 hidden sm:inline">/</span>
@@ -40,6 +45,7 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
         </div>
       </div>
 
+      {/* Right Actions: Search (Desktop) & Theme/Notifications */}
       <div className="flex items-center gap-2 lg:gap-4">
         <div className="relative group hidden md:block">
           <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">

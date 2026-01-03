@@ -9,9 +9,11 @@ const data = [
   { name: "Jun", current: 24, previous: 20 },
 ]
 
+// Line chart comparing Current vs Previous week revenue using solid and dashed lines
 export function RevenueChart() {
   return (
     <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md">
+      {/* Custom Legend Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-4">
         <h3 className="text-[14px] font-semibold text-foreground">Revenue</h3>
         <div className="flex items-center gap-4 flex-wrap">
@@ -29,6 +31,7 @@ export function RevenueChart() {
           </div>
         </div>
       </div>
+
       <div className="flex-1 w-full min-h-[200px]" style={{ width: '100%', height: '100%' }}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={1}>
           <LineChart data={data} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>

@@ -8,6 +8,7 @@ const products = [
   { name: "Marco Shoes", price: "$79.49", quantity: 64, amount: "$1,965.81" },
 ]
 
+// Renders a simple list of top-selling products using the shared Table component
 export function TopProducts() {
   return (
     <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl overflow-hidden border border-border/50 transition-all duration-200 hover:shadow-md">

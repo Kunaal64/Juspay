@@ -1,19 +1,18 @@
 import { TrendingUp, TrendingDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 
+// Displays a metric with a value, trend indicator, and dynamic styling based on the variant
 export function StatCard({ title, value, trend, trendUp, variant = "default" }) {
   const isHex = variant.startsWith('#')
   
-  // Check if this variant needs black text in dark mode (colored backgrounds)
+  // Specific colored cards need black text overrides in dark mode
   const needsBlackTextInDark = variant === "blue" || variant === "#E5ECF6"
 
-  // For hex variants, map to appropriate light/dark mode classes
+  // Maps hex variants to appropriate light/dark classes
   const getHexClasses = (hex) => {
-    // Revenue/Orders: light hex color, dark mode white/5
     if (hex === '#F7F9FB') return 'bg-[#F7F9FB] dark:bg-white/5'
-    // Growth: keep colored background in both modes (like Customers/blue)
     if (hex === '#E5ECF6') return 'bg-[#E5ECF6] dark:bg-[#E5ECF6]'
-    return 'dark:bg-white/5' // Fallback
+    return 'dark:bg-white/5' 
   }
 
   return (

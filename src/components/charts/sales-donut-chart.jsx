@@ -11,10 +11,11 @@ const GEOMETRY = {
   viewBoxSize: 100,
   center: 50,
   outerRadius: 42,
-  innerRadius: 30, // Increased radius for thinner segments (42-30 = 12px thickness)
+  innerRadius: 30, // 12px thickness
   gapAngle: 6,
 }
 
+// Custom SVG donut component supporting asymmetric rounded caps (interlocking segments)
 const TotalSalesDonut = memo(function TotalSalesDonut() {
   const { gapAngle } = GEOMETRY
   const halfGap = gapAngle / 2
@@ -22,38 +23,27 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
   const containerRef = useRef(null)
 
-  // Data (Clockwise Order: E-mail -> Sponsored -> Direct -> Affiliate)
+  // Clockwise order: Email -> Sponsored -> Direct -> Affiliate
   const data = [
-    { id: "email", value: 48.96, color: COLORS.darkGray, label: "E-mail" },        // Light Blue
-    { id: "sponsored", value: 154.02, color: COLORS.green, label: "Sponsored" },  // Purple/Green in code (Visual: Purple)
-    { id: "direct", value: 300.56, color: "var(--chart-direct-segment)", label: "Direct" }, // Black / Dark Mode Custom
-    { id: "affiliate", value: 135.18, color: COLORS.blue, label: "Affiliate" },   // Green
+    { id: "email", value: 48.96, color: COLORS.darkGray, label: "E-mail" },
+    { id: "sponsored", value: 154.02, color: COLORS.green, label: "Sponsored" },
+    { id: "direct", value: 300.56, color: "var(--chart-direct-segment)", label: "Direct" }, 
+    { id: "affiliate", value: 135.18, color: COLORS.blue, label: "Affiliate" },
   ]
 
   const total = data.reduce((sum, item) => sum + item.value, 0)
+  let currentAngle = 180 // Start from left (9 o'clock)
   
-  let currentAngle = 180 // Start at Left (9 o'clock)
-  
-  // Calculate segments
   const segments = data.map(item => {
     const percentage = item.value / total
     const angleSpan = percentage * 360
-    
-    // Each segment gets (span - gap) degrees of arc
     const start = currentAngle + halfGap
     const end = currentAngle + angleSpan - halfGap
-    
-    // Save next start angle
     currentAngle += angleSpan
-    
-    return {
-      ...item,
-      start: start, 
-      end: end,
-    }
+    return { ...item, start, end }
   })
 
-  // Helper to get cartesian point
+  // Converts polar coordinates to Cartesian for SVG paths
   const getPoint = (r, angle) => {
     const rad = (angle * Math.PI) / 180
     return {
@@ -62,28 +52,25 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
     }
   }
 
+  // Generates SVG path command with one concave and one convex end cap
   const createPath = (startAngle, endAngle) => {
     const { outerRadius, innerRadius } = GEOMETRY
     const thickness = outerRadius - innerRadius
     const capRadius = thickness / 2
     
-    const p1 = getPoint(outerRadius, startAngle) // Outer Start
-    const p2 = getPoint(outerRadius, endAngle)   // Outer End
-    const p3 = getPoint(innerRadius, endAngle)   // Inner End
-    const p4 = getPoint(innerRadius, startAngle) // Inner Start
+    const p1 = getPoint(outerRadius, startAngle)
+    const p2 = getPoint(outerRadius, endAngle)
+    const p3 = getPoint(innerRadius, endAngle)
+    const p4 = getPoint(innerRadius, startAngle)
     
     const largeArc = endAngle - startAngle > 180 ? 1 : 0
     
     return [
       `M ${p1.x} ${p1.y}`,
       `A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${p2.x} ${p2.y}`,
-      // End Cap: Outer End -> Inner End
-      // Sweep 0: Bulges "Outward" (Convex)
-      `A ${capRadius} ${capRadius} 0 0 0 ${p3.x} ${p3.y}`, 
+      `A ${capRadius} ${capRadius} 0 0 0 ${p3.x} ${p3.y}`, // Convex end cap
       `A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${p4.x} ${p4.y}`,
-      // Start Cap: Inner Start -> Outer Start
-      // Sweep 1: Bulges "Inward" (Concave)
-      `A ${capRadius} ${capRadius} 0 0 1 ${p1.x} ${p1.y}`,
+      `A ${capRadius} ${capRadius} 0 0 1 ${p1.x} ${p1.y}`, // Concave start cap
       "Z"
     ].join(" ")
   }
@@ -103,9 +90,7 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
       ref={containerRef}
       className="w-full h-full flex items-center justify-center relative animate-scale-in"
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        setHoveredData(null)
-      }}
+      onMouseLeave={() => setHoveredData(null)}
     >
       <svg
         viewBox={`0 0 ${GEOMETRY.viewBoxSize} ${GEOMETRY.viewBoxSize}`}
@@ -124,14 +109,14 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
         ))}
       </svg>
       
-      {/* Floating Tooltip - Ultra Compact & Dark */}
+      {/* Floating Tooltip */}
       {hoveredData && (
         <div 
           className="absolute z-50 pointer-events-none bg-[#1C1C1C]/80 text-white px-1.5 py-1 rounded-md shadow-xl border border-white/5 flex flex-col items-start whitespace-nowrap backdrop-blur-sm"
           style={{
             left: mousePos.x,
             top: mousePos.y,
-            transform: 'translate(-50%, -130%)' // Move up further to clear cursor
+            transform: 'translate(-50%, -130%)'
           }}
         >
           <div className="flex items-center gap-1 mb-0.5">
@@ -145,17 +130,16 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
   )
 })
 
+// Main wrapper with chart and custom compact legend
 export function SalesDonutChart() {
   return (
     <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md group">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Total Sales</h3>
       <div className="flex-1 flex flex-col items-center justify-around" style={{ width: '100%', height: '100%' }}>
-        {/* Adjusted Size: 140px to compact height */}
         <div className="relative w-[140px] h-[140px] min-h-[140px] mb-2">
           <TotalSalesDonut />
         </div>
         
-        {/* Legend with compact spacing */}
         <div className="w-full space-y-2">
           {[
             { color: "var(--chart-direct-segment)", label: "Direct", value: "$300.56" },

@@ -12,13 +12,14 @@ import { RevenueByLocation } from '@/components/revenue-by-location'
 import { TopProducts } from '@/components/top-products'
 import { cn } from '@/lib/utils'
 
+// Main application layout managing sidebars, responsive overlays, and routing between views
 export default function App() {
   const [leftSidebarVisible, setLeftSidebarVisible] = useState(true)
   const [rightSidebarVisible, setRightSidebarVisible] = useState(true)
   const [view, setView] = useState("overview")
   const [isMobile, setIsMobile] = useState(false)
 
-  // Handle responsive sidebar state
+  // Auto-collapse sidebars on mobile screens < 1024px
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1024
@@ -32,9 +33,7 @@ export default function App() {
       }
     }
 
-    // Set initial state
     handleResize()
-
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
@@ -42,7 +41,8 @@ export default function App() {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
       <main className="flex min-h-screen bg-background font-sans antialiased relative overflow-hidden">
-        {/* Mobile Backdrop for Left Sidebar */}
+        
+        {/* Left Sidebar Overlay (Mobile) */}
         {isMobile && leftSidebarVisible && (
           <div 
             className="fixed inset-0 bg-black/50 z-40 lg:hidden fade-in-0"
@@ -50,13 +50,12 @@ export default function App() {
           />
         )}
 
-        {/* Left Sidebar Wrapper */}
+        {/* Left Sidebar (Drawer/Column) */}
         <div className={cn(
           "shrink-0 bg-background transition-all duration-300 ease-in-out z-50",
           isMobile 
             ? "fixed inset-y-0 left-0 h-full shadow-2xl" 
             : "relative",
-          // Visibility & Width Logic
           isMobile
             ? (leftSidebarVisible ? "translate-x-0" : "-translate-x-full")
             : (leftSidebarVisible ? "w-[212px] translate-x-0" : "w-0 -translate-x-full opacity-0 overflow-hidden")
@@ -70,6 +69,7 @@ export default function App() {
           />
         </div>
 
+        {/* Center Content Area */}
         <div className="flex-1 flex flex-col min-h-screen overflow-hidden transition-all duration-300">
           <DashboardHeader
             toggleLeftSidebar={() => setLeftSidebarVisible(!leftSidebarVisible)}
@@ -80,25 +80,22 @@ export default function App() {
           <div className="flex-1 overflow-y-auto custom-scrollbar">
             {view === "overview" ? (
               <div className="p-4 md:p-6 space-y-6">
-                {/* Section Title */}
                 <h1 className="text-l font-semibold text-foreground">eCommerce</h1>
                 
-                {/* Row 1: Stat Cards (50%) + Projections Chart (50%) */}
+                {/* 1. Key Metrics & Projections */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Left: 2x2 Stat Cards Grid */}
                   <div className="grid grid-cols-2 gap-4">
                     <StatCard title="Customers" value="3,781" trend="+11.01%" trendUp={true} variant="blue" />
                     <StatCard title="Orders"  value="1,219" trend="-0.03%" trendUp={false} variant="#F7F9FB" />
                     <StatCard title="Revenue"  value="$695" trend="+15.03%" trendUp={true} variant="#F7F9FB" />
                     <StatCard title="Growth"  value="30.1%" trend="+6.08%" trendUp={true} variant="#E5ECF6" />
                   </div>
-                  {/* Right: Projections Chart */}
                   <div className="h-full min-h-[300px] lg:min-h-auto">
                     <ProjectionsChart />
                   </div>
                 </div>
 
-                {/* Row 2: Revenue Chart (75%) + Revenue By Location (25%) */}
+                {/* 2. Revenue Trends */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                   <div className="lg:col-span-3">
                     <RevenueChart />
@@ -108,7 +105,7 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Row 3: Top Products (75%) + Sales Donut (25%) */}
+                {/* 3. Product Sales */}
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                   <div className="lg:col-span-3 overflow-x-auto">
                     <TopProducts />
@@ -124,7 +121,7 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Backdrop for Right Sidebar */}
+        {/* Right Sidebar Overlay (Mobile) */}
         {isMobile && rightSidebarVisible && (
           <div 
             className="fixed inset-0 bg-black/50 z-40 lg:hidden"
@@ -132,13 +129,12 @@ export default function App() {
           />
         )}
 
-        {/* Right Sidebar Wrapper */}
+        {/* Right Sidebar (Drawer/Column) */}
         <div className={cn(
           "shrink-0 bg-background transition-all duration-300 ease-in-out z-50",
           isMobile 
             ? "fixed inset-y-0 right-0 h-full shadow-2xl" 
             : "relative",
-          // Visibility & Width Logic
           isMobile
             ? (rightSidebarVisible ? "translate-x-0" : "translate-x-full")
             : (rightSidebarVisible ? "w-[280px] translate-x-0" : "w-0 translate-x-full opacity-0 overflow-hidden")

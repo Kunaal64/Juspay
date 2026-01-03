@@ -1,13 +1,6 @@
 /**
- * OrdersList Component
- * 
- * A comprehensive order management table with search, filter, sort, and pagination.
- * Features:
- * - Search by username
- * - Filter by order status
- * - Sort by username, order ID, or date
- * - Keyboard accessible navigation
- * - Optimized rendering with useMemo
+ * Comprehensive order management table with filtering, searching, sorting, and pagination.
+ * Uses memoization for performance optimization on large datasets.
  */
 
 import { useState, useMemo, useCallback, memo } from "react"
@@ -31,7 +24,6 @@ import { cn } from "@/lib/utils"
 // CONSTANTS
 // ============================================
 
-/** Status color mapping for visual indicators */
 const STATUS_COLORS = {
   "In Progress": "text-[#8A8CD9]",
   Complete: "text-[#4AA785]",
@@ -40,10 +32,8 @@ const STATUS_COLORS = {
   Rejected: "text-[#1C1C1C33] dark:text-[#FFFFFF4D]",
 }
 
-/** All available status options for filtering */
 const STATUS_OPTIONS = ["In Progress", "Complete", "Pending", "Approved", "Rejected"]
 
-/** Sample data arrays for generating dummy orders */
 const SAMPLE_DATA = {
   firstNames: ["Natali", "Kate", "Drew", "Orlando", "Andi", "Koray", "Lana", "Demi", "Candice", "Marcus", "Sophia", "James", "Emma", "Michael", "Olivia", "William", "Ava", "Alexander", "Isabella", "Daniel"],
   lastNames: ["Craig", "Morrison", "Cano", "Diggs", "Lane", "Okumus", "Steiner", "Wilkinson", "Wu", "Chen", "Rodriguez", "Smith", "Johnson", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson"],
@@ -53,7 +43,6 @@ const SAMPLE_DATA = {
   dates: ["Just now", "5 min ago", "15 min ago", "1 hour ago", "3 hours ago", "Yesterday", "2 days ago", "3 days ago", "1 week ago", "Jan 15, 2024", "Jan 10, 2024", "Dec 28, 2023", "Dec 15, 2023", "Nov 30, 2023", "Nov 15, 2023"],
 }
 
-/** Date priority mapping for chronological sorting (lower = more recent) */
 const DATE_PRIORITY = {
   "Just now": 1, "5 min ago": 2, "15 min ago": 3, "1 hour ago": 4, "3 hours ago": 5,
   "Yesterday": 6, "2 days ago": 7, "3 days ago": 8, "1 week ago": 9,
@@ -61,7 +50,7 @@ const DATE_PRIORITY = {
   "Dec 15, 2023": 13, "Nov 30, 2023": 14, "Nov 15, 2023": 15,
 }
 
-/** Generate dummy order data */
+// Generates 70 sample orders for demonstration
 const DUMMY_ORDERS = Array.from({ length: 70 }, (_, i) => ({
   id: `#CM${(9800 + i + 1).toString()}`,
   user: {
@@ -78,13 +67,7 @@ const DUMMY_ORDERS = Array.from({ length: 70 }, (_, i) => ({
 // REUSABLE SUB-COMPONENTS
 // ============================================
 
-/**
- * IconButton - Reusable button component with consistent styling
- * @param {object} props - Component props
- * @param {React.ReactNode} props.children - Button content (icon)
- * @param {boolean} props.active - Whether button is in active state
- * @param {string} props.label - Accessible label for screen readers
- */
+// Generic icon button wrapper with styled states
 const IconButton = memo(function IconButton({ 
   children, 
   active = false, 
@@ -108,11 +91,7 @@ const IconButton = memo(function IconButton({
   )
 })
 
-/**
- * StatusBadge - Displays order status with color indicator
- * @param {object} props - Component props
- * @param {string} props.status - Order status string
- */
+// Visual status indicator with color dot
 const StatusBadge = memo(function StatusBadge({ status }) {
   const colorClass = STATUS_COLORS[status] || "text-muted-foreground"
   
@@ -127,15 +106,7 @@ const StatusBadge = memo(function StatusBadge({ status }) {
   )
 })
 
-/**
- * SortableHeader - Table header with sort functionality
- * @param {object} props - Component props
- * @param {string} props.field - Field name for sorting
- * @param {string} props.label - Display label
- * @param {string} props.currentSort - Currently sorted field
- * @param {string} props.direction - Current sort direction
- * @param {function} props.onSort - Sort handler function
- */
+// Table header with built-in sorting logic and indicators
 const SortableHeader = memo(function SortableHeader({ 
   field, 
   label, 
@@ -166,13 +137,7 @@ const SortableHeader = memo(function SortableHeader({
   )
 })
 
-/**
- * Dropdown - Reusable dropdown menu component
- * @param {object} props - Component props
- * @param {boolean} props.isOpen - Whether dropdown is visible
- * @param {string} props.title - Dropdown title
- * @param {React.ReactNode} props.children - Dropdown content
- */
+// Animated dropdown container for menus
 const Dropdown = memo(function Dropdown({ isOpen, title, children, onClose }) {
   if (!isOpen) return null
   
@@ -190,15 +155,8 @@ const Dropdown = memo(function Dropdown({ isOpen, title, children, onClose }) {
   )
 })
 
-/**
- * Pagination - Reusable pagination controls
- * @param {object} props - Component props
- * @param {number} props.currentPage - Current page number
- * @param {number} props.totalPages - Total number of pages
- * @param {function} props.onPageChange - Page change handler
- */
+// Smart pagination component that shows window of pages around current
 const Pagination = memo(function Pagination({ currentPage, totalPages, onPageChange }) {
-  // Show max 5 page numbers centered around current page
   const getPageNumbers = () => {
     const pages = []
     const maxVisible = 5
@@ -265,7 +223,6 @@ const Pagination = memo(function Pagination({ currentPage, totalPages, onPageCha
 // ============================================
 
 export function OrdersList() {
-  // State management
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedOrders, setSelectedOrders] = useState([])
   const [sortField, setSortField] = useState(null)
@@ -277,16 +234,14 @@ export function OrdersList() {
   
   const itemsPerPage = 10
 
-  // Memoized filtered orders to prevent unnecessary recalculations
+  // Efficiently filter dataset based on search inputs and filter tags
   const filteredOrders = useMemo(() => {
     let orders = DUMMY_ORDERS
     
-    // Apply status filter
     if (statusFilters.length > 0) {
       orders = orders.filter(order => statusFilters.includes(order.status))
     }
     
-    // Apply search filter (case-insensitive username search)
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim()
       orders = orders.filter(order => 
@@ -297,7 +252,7 @@ export function OrdersList() {
     return orders
   }, [statusFilters, searchQuery])
 
-  // Memoized sorted orders
+  // Sort the filtered dataset dynamically
   const sortedOrders = useMemo(() => {
     if (!sortField) return filteredOrders
 
@@ -324,14 +279,12 @@ export function OrdersList() {
     })
   }, [sortField, sortDirection, filteredOrders])
 
-  // Derived values
   const totalPages = Math.ceil(sortedOrders.length / itemsPerPage)
   const currentOrders = sortedOrders.slice(
     (currentPage - 1) * itemsPerPage, 
     currentPage * itemsPerPage
   )
 
-  // Event handlers using useCallback for performance
   const handleSelectAll = useCallback(() => {
     setSelectedOrders(prev => 
       prev.length === currentOrders.length 
@@ -396,12 +349,10 @@ export function OrdersList() {
     setShowFilterMenu(false)
   }, [])
 
-  // Check if any filters/sorts are active
   const hasActiveFilters = statusFilters.length > 0 || searchQuery || sortField
 
   return (
     <div className="p-3 sm:p-4 md:p-6 space-y-3 sm:space-y-4 animate-in fade-in duration-500">
-      {/* Page Header */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <h1 className="text-sm font-semibold text-foreground">Order List</h1>
         {sortedOrders.length !== DUMMY_ORDERS.length && (
@@ -412,7 +363,7 @@ export function OrdersList() {
       </header>
 
       <div className="flex flex-col gap-3 sm:gap-4">
-        {/* Toolbar - responsive: stacked on mobile, row on tablet+ */}
+        {/* Toolbar controls for filter, sort, and search */}
         <div 
           className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-secondary/30 dark:bg-white/5 rounded-lg px-2 py-1.5 border border-border/50"
           role="toolbar"
@@ -423,7 +374,6 @@ export function OrdersList() {
               <Plus className="w-4 h-4" aria-hidden="true" />
             </IconButton>
             
-            {/* Filter Dropdown */}
             <div className="relative">
               <IconButton 
                 onClick={() => { setShowFilterMenu(!showFilterMenu); setShowSortMenu(false); }}
@@ -476,7 +426,6 @@ export function OrdersList() {
               </Dropdown>
             </div>
             
-            {/* Sort Dropdown */}
             <div className="relative">
               <IconButton 
                 onClick={() => { setShowSortMenu(!showSortMenu); setShowFilterMenu(false); }}
@@ -531,7 +480,6 @@ export function OrdersList() {
             </div>
           </div>
           
-          {/* Search Input - responsive: full width on mobile */}
           <div className="relative w-full sm:w-auto">
             <Search 
               className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground/50" 
@@ -557,7 +505,6 @@ export function OrdersList() {
           </div>
         </div>
 
-        {/* Active Filters Indicator */}
         {hasActiveFilters && (
           <div 
             className="flex items-center gap-4 text-xs text-muted-foreground flex-wrap"
@@ -594,7 +541,7 @@ export function OrdersList() {
           </div>
         )}
 
-        {/* Orders Table */}
+        {/* Data Table with selection and actions */}
         <div className="overflow-x-auto" role="region" aria-label="Orders table">
           <table className="w-full text-sm text-left border-collapse">
             <thead>
@@ -702,7 +649,6 @@ export function OrdersList() {
           </table>
         </div>
 
-        {/* Pagination */}
         {totalPages > 1 && (
           <Pagination 
             currentPage={currentPage} 
@@ -712,7 +658,6 @@ export function OrdersList() {
         )}
       </div>
 
-      {/* Backdrop to close dropdowns */}
       {(showSortMenu || showFilterMenu) && (
         <div 
           className="fixed inset-0 z-40" 

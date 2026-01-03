@@ -1,3 +1,7 @@
+/**
+ * Displays revenue breakdown by city using a world map overlay and progress bars.
+ * Dots are absolute positioned percentages over the map image.
+ */
 export function RevenueByLocation() {
   const locations = [
     { name: "New York", value: "72K", progress: 75 },
@@ -10,7 +14,8 @@ export function RevenueByLocation() {
     <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-colors">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Revenue by Location</h3>
       <div className="flex-1 flex flex-col justify-between">
-        {/* World Map Image */}
+        
+        {/* World Map with CSS-positioned markers */}
         <div className="relative w-full mb-6 mt-2">
           <img 
             src="/world-map.png" 
@@ -19,7 +24,6 @@ export function RevenueByLocation() {
             style={{ maxHeight: '180px' }}
           />
           
-          {/* Location Dots */}
           {[
             { name: "New York", top: "34%", left: "26%" },
             { name: "San Francisco", top: "37%", left: "16%" },
@@ -37,7 +41,7 @@ export function RevenueByLocation() {
           ))}
         </div>
 
-        {/* Location Progress Bars */}
+        {/* List view with progress bars */}
         <div className="space-y-3">
           {locations.map((loc) => (
             <div key={loc.name} className="space-y-1.5">

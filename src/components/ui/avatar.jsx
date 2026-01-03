@@ -3,6 +3,7 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
 import { cn } from '@/lib/utils'
 
+// Root container for the Avatar, handles circular shape and overflow
 function Avatar({ className, ...props }) {
   return (
     <AvatarPrimitive.Root
@@ -16,6 +17,7 @@ function Avatar({ className, ...props }) {
   )
 }
 
+// Renders the avatar image with proper aspect ratio
 function AvatarImage({ className, ...props }) {
   return (
     <AvatarPrimitive.Image
@@ -26,6 +28,7 @@ function AvatarImage({ className, ...props }) {
   )
 }
 
+// Fallback display (initials/icon) when image fails or loads
 function AvatarFallback({ className, ...props }) {
   return (
     <AvatarPrimitive.Fallback

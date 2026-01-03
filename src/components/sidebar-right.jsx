@@ -9,6 +9,7 @@ const activities = [
   { id: 5, avatar: "/kate.jpg", label: "Deleted a page in Project X", time: "Feb 2, 2023" },
 ]
 
+// Secondary sidebar displaying notifications, user activities, and contacts
 export function SidebarRight() {
   return (
     <aside className="w-[280px] h-full border-l border-border flex flex-col py-5 px-5 shrink-0 bg-background overflow-y-auto custom-scrollbar transition-colors">

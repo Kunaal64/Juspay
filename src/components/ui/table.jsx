@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
+// Responsive container wrapping the raw table element
 function Table({ className, ...props }) {
   return (
     <div
@@ -17,6 +18,7 @@ function Table({ className, ...props }) {
   )
 }
 
+// Table header group component
 function TableHeader({ className, ...props }) {
   return (
     <thead
@@ -27,6 +29,7 @@ function TableHeader({ className, ...props }) {
   )
 }
 
+// Table body group component
 function TableBody({ className, ...props }) {
   return (
     <tbody
@@ -37,6 +40,7 @@ function TableBody({ className, ...props }) {
   )
 }
 
+// Table footer summary component
 function TableFooter({ className, ...props }) {
   return (
     <tfoot
@@ -50,6 +54,7 @@ function TableFooter({ className, ...props }) {
   )
 }
 
+// Table row with hover states and selection support
 function TableRow({ className, ...props }) {
   return (
     <tr
@@ -63,6 +68,7 @@ function TableRow({ className, ...props }) {
   )
 }
 
+// Header cell with alignment and styling props
 function TableHead({ className, ...props }) {
   return (
     <th
@@ -76,6 +82,7 @@ function TableHead({ className, ...props }) {
   )
 }
 
+// Standard data cell component
 function TableCell({ className, ...props }) {
   return (
     <td
@@ -89,6 +96,7 @@ function TableCell({ className, ...props }) {
   )
 }
 
+// Caption text displayed below the table
 function TableCaption({ className, ...props }) {
   return (
     <caption

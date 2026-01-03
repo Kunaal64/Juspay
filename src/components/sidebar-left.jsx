@@ -15,19 +15,7 @@ import {
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-/**
- * SidebarLeft - Main navigation sidebar component
- * 
- * Features:
- * - Favorites/Recently tabs for quick access
- * - Expandable dashboard and pages sections
- * - Active state indicators
- * - Keyboard accessible navigation
- * 
- * @param {object} props - Component props
- * @param {string} props.currentView - Currently active view ('overview' | 'order-list')
- * @param {function} props.onViewChange - Callback when view changes
- */
+// Primary navigation sidebar with collapsible sections for Favorites, Dashboards, and Pages
 export function SidebarLeft({ currentView = "overview", onViewChange }) {
   const [favoritesTab, setFavoritesTab] = useState("favorites")
   const [defaultExpanded, setDefaultExpanded] = useState(true)
@@ -39,7 +27,6 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
       role="navigation"
       aria-label="Main navigation"
     >
-      {/* Logo */}
       <div className="flex items-center gap-2 px-2 mb-6">
         <div className="w-6 h-6 rounded-full bg-foreground flex items-center justify-center">
           <CircleDot className="w-4 h-4 text-background" />
@@ -84,7 +71,6 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
             Dashboards
           </h3>
           <nav className="space-y-0.5">
-            {/* Default - with active indicator */}
             <div onClick={() => setDefaultExpanded(!defaultExpanded)}>
               <NavItem
                 icon={<LayoutDashboard className="w-4 h-4" />}
@@ -131,7 +117,6 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
         <section>
           <h3 className="px-2 mb-2 text-[14px] font-medium text-muted-foreground">Pages</h3>
           <nav className="space-y-0.5">
-            {/* User Profile with dropdown */}
             <div onClick={() => setUserProfileExpanded(!userProfileExpanded)}>
               <NavItem
                 icon={<UserCircle className="w-4 h-4" />}
@@ -163,18 +148,7 @@ export function SidebarLeft({ currentView = "overview", onViewChange }) {
   )
 }
 
-/**
- * NavItem - Navigation item component for sidebar
- * @param {object} props - Component props
- * @param {React.ReactNode} props.icon - Icon element to display
- * @param {string} props.label - Navigation item label
- * @param {boolean} props.active - Whether item is currently active
- * @param {boolean} props.hasActiveIndicator - Show active indicator bar
- * @param {boolean} props.expandable - Whether item can be expanded
- * @param {boolean} props.expanded - Current expansion state
- * @param {boolean} props.bullet - Show bullet instead of icon
- * @param {boolean} props.muted - Use muted color for bullet
- */
+// Reusable navigation item with support for icons, bullets, and expand/collapse chevrons
 function NavItem({
   icon,
   label,
@@ -206,7 +180,6 @@ function NavItem({
         active ? "text-foreground" : "text-foreground hover:text-foreground",
       )}
     >
-      {/* Active indicator bar */}
       {hasActiveIndicator && (
         <div 
           className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-foreground rounded-r" 
@@ -214,7 +187,6 @@ function NavItem({
         />
       )}
       
-      {/* Chevron at front for expandable items */}
       {expandable && (
         expanded ? (
           <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" aria-hidden="true" />
@@ -223,7 +195,6 @@ function NavItem({
         )
       )}
       
-      {/* Icon or bullet indicator */}
       {bullet ? (
         <span 
           className={cn(
