@@ -36,6 +36,7 @@
   --sidebar-accent-foreground: #1C1C1C;
   --sidebar-border: #E9EAEC;
   --sidebar-ring: #A8A8A8;
+  --chart-direct-segment: #1C1C1C;
 }
 
 .dark {
@@ -71,6 +72,7 @@
   --sidebar-accent-foreground: #FFFFFF;
   --sidebar-border: #333333;
   --sidebar-ring: #555555;
+  --chart-direct-segment: #C6C7F8;
 }
 
 @layer base {
