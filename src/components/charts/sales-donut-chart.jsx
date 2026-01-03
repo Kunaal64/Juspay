@@ -133,7 +133,7 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
 // Main wrapper with chart and custom compact legend
 export function SalesDonutChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/5 p-3 sm:p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md group">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-3 sm:p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-all duration-200 ease-in-out hover:shadow-md hover:-translate-y-0.5 group">
       <h3 className="text-[12px] sm:text-[14px] font-semibold mb-2 sm:mb-4 text-foreground">Total Sales</h3>
       <div className="flex-1 flex flex-col items-center justify-around" style={{ width: '100%', height: '100%' }}>
         <div className="relative w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] min-h-[120px] sm:min-h-[140px] mb-2">

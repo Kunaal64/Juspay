@@ -11,7 +11,7 @@ const products = [
 // Renders a simple list of top-selling products using the shared Table component
 export function TopProducts() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl overflow-hidden border border-border/50 transition-all duration-200 hover:shadow-md">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl overflow-hidden border border-border/50 transition-all duration-200 ease-in-out hover:shadow-md hover:-translate-y-0.5">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Top Selling Products</h3>
       <div className="overflow-x-auto">
         <Table>

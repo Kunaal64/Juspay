@@ -12,7 +12,7 @@ const data = [
 // Line chart comparing Current vs Previous week revenue using solid and dashed lines
 export function RevenueChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-[340px] flex flex-col border border-border/50 transition-all duration-200 ease-in-out hover:shadow-md hover:-translate-y-0.5">
       {/* Custom Legend Header */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 mb-4">
         <h3 className="text-[14px] font-semibold text-foreground">Revenue</h3>

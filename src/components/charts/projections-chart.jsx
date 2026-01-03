@@ -12,7 +12,7 @@ const data = [
 // Bar chart comparing Actual vs Projected values using a layered bar-in-bar design (double X-axis)
 export function ProjectionsChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full min-h-[220px] flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md">
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full min-h-[220px] flex flex-col border border-border/50 transition-all duration-200 ease-in-out hover:shadow-md hover:-translate-y-0.5">
       <h3 className="text-[14px] font-semibold mb-4 text-foreground">Projections vs Actuals</h3>
       <div className="flex-1 w-full min-150px" style={{ width: '100%', height: '100%' }}>
         <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} debounce={1}>
