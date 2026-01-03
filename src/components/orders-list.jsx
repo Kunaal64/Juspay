@@ -18,7 +18,7 @@ import {
   X,
   Check,
 } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { cn, usePersistentState } from "@/lib/utils"
 
 // ============================================
 // CONSTANTS
@@ -223,14 +223,14 @@ const Pagination = memo(function Pagination({ currentPage, totalPages, onPageCha
 // ============================================
 
 export function OrdersList() {
-  const [currentPage, setCurrentPage] = useState(1)
+  const [currentPage, setCurrentPage] = usePersistentState('orders_current_page', 1)
   const [selectedOrders, setSelectedOrders] = useState([])
-  const [sortField, setSortField] = useState(null)
-  const [sortDirection, setSortDirection] = useState('asc')
+  const [sortField, setSortField] = usePersistentState('orders_sort_field', null)
+  const [sortDirection, setSortDirection] = usePersistentState('orders_sort_direction', 'asc')
   const [showSortMenu, setShowSortMenu] = useState(false)
   const [showFilterMenu, setShowFilterMenu] = useState(false)
-  const [statusFilters, setStatusFilters] = useState([])
-  const [searchQuery, setSearchQuery] = useState('')
+  const [statusFilters, setStatusFilters] = usePersistentState('orders_status_filters', [])
+  const [searchQuery, setSearchQuery] = usePersistentState('orders_search_query', '')
   
   const itemsPerPage = 10
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ThemeProvider } from '@/components/theme-provider'
 import { SidebarLeft } from '@/components/sidebar-left'
 import { SidebarRight } from '@/components/sidebar-right'
@@ -10,33 +10,44 @@ import { RevenueChart } from '@/components/charts/revenue-chart'
 import { SalesDonutChart } from '@/components/charts/sales-donut-chart'
 import { RevenueByLocation } from '@/components/revenue-by-location'
 import { TopProducts } from '@/components/top-products'
-import { cn } from '@/lib/utils'
+import { cn, usePersistentState } from '@/lib/utils'
 
 // Main application layout managing sidebars, responsive overlays, and routing between views
 export default function App() {
-  const [leftSidebarVisible, setLeftSidebarVisible] = useState(true)
-  const [rightSidebarVisible, setRightSidebarVisible] = useState(true)
-  const [view, setView] = useState("overview")
+  const [leftSidebarVisible, setLeftSidebarVisible] = usePersistentState('juspay_sidebar_left', true)
+  const [rightSidebarVisible, setRightSidebarVisible] = usePersistentState('juspay_sidebar_right', true)
+  const [view, setView] = usePersistentState('juspay_current_view', "overview")
   const [isMobile, setIsMobile] = useState(false)
+  const isMounted = useRef(false)
 
-  // Auto-collapse sidebars on mobile screens < 1024px
+  // Handle Window Resize (Mobile Detection)
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 1024
-      setIsMobile(mobile)
-      if (mobile) {
-        setLeftSidebarVisible(false)
-        setRightSidebarVisible(false)
-      } else {
-        setLeftSidebarVisible(true)
-        setRightSidebarVisible(true)
-      }
+      setIsMobile(window.innerWidth < 1024)
     }
-
+    
+    // Initial check
     handleResize()
+    
     window.addEventListener('resize', handleResize)
     return () => window.removeEventListener('resize', handleResize)
   }, [])
+
+  // Handle Responsive Sidebar Switching (Only on mode change, skipping initial mount)
+  useEffect(() => {
+    if (!isMounted.current) {
+      isMounted.current = true
+      return
+    }
+
+    if (isMobile) {
+      setLeftSidebarVisible(false)
+      setRightSidebarVisible(false)
+    } else {
+      setLeftSidebarVisible(true)
+      setRightSidebarVisible(true)
+    }
+  }, [isMobile, setLeftSidebarVisible, setRightSidebarVisible])
 
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
