@@ -84,7 +84,7 @@ export default function App() {
                 
                 {/* 1. Key Metrics & Projections */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <StatCard title="Customers" value="3,781" trend="+11.01%" trendUp={true} variant="blue" />
                     <StatCard title="Orders"  value="1,219" trend="-0.03%" trendUp={false} variant="#F7F9FB" />
                     <StatCard title="Revenue"  value="$695" trend="+15.03%" trendUp={true} variant="#F7F9FB" />

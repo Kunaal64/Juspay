@@ -18,7 +18,7 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
   return (
     <div
       className={cn(
-        "p-6 rounded-2xl flex flex-col gap-4 relative overflow-hidden",
+        "p-3 sm:p-6 rounded-2xl flex flex-col gap-2 sm:gap-4 relative overflow-hidden",
         "transition-all duration-200 ease-out",
         "hover:shadow-lg hover:-translate-y-0.5 hover:scale-[1.01]",
         "cursor-default",
@@ -29,7 +29,7 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
       )}
     >
       <h3 className={cn(
-        "text-[14px] font-bold",
+        "text-[10px] sm:text-[14px] font-bold truncate",
         variant === "default" ? "text-muted-foreground" : "text-foreground/80",
         needsBlackTextInDark && "dark:text-black/80"
       )}>
@@ -37,22 +37,22 @@ export function StatCard({ title, value, trend, trendUp, variant = "default" }) 
       </h3>
       <div className="flex items-end justify-between gap-4">
         <span className={cn(
-          "text-[28px] font-semibold tracking-tight leading-none text-foreground",
+          "text-lg sm:text-[28px] font-semibold tracking-tight leading-none text-foreground",
           needsBlackTextInDark && "dark:text-black"
         )}>
           {value}
         </span>
-        <div className="flex items-center gap-1.5 mb-1">
+        <div className="flex items-center gap-0.5 sm:gap-1.5 mb-0.5 sm:mb-1">
           <span className={cn(
-            "text-[12px] font-bold text-foreground/60",
+            "text-[10px] sm:text-[12px] font-bold text-foreground/60",
             needsBlackTextInDark && "dark:text-black/60"
           )}>
             {trend}
           </span>
           {trendUp ? (
-            <TrendingUp className={cn("w-3.5 h-3.5 text-foreground/60", needsBlackTextInDark && "dark:text-black/60")} />
+            <TrendingUp className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5 text-foreground/60", needsBlackTextInDark && "dark:text-black/60")} />
           ) : (
-            <TrendingDown className={cn("w-3.5 h-3.5 text-foreground/60", needsBlackTextInDark && "dark:text-black/60")} />
+            <TrendingDown className={cn("w-3 h-3 sm:w-3.5 sm:h-3.5 text-foreground/60", needsBlackTextInDark && "dark:text-black/60")} />
           )}
         </div>
       </div>

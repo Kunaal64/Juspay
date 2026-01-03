@@ -133,10 +133,10 @@ const TotalSalesDonut = memo(function TotalSalesDonut() {
 // Main wrapper with chart and custom compact legend
 export function SalesDonutChart() {
   return (
-    <div className="bg-[#F7F9FB] dark:bg-white/5 p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md group">
-      <h3 className="text-[14px] font-semibold mb-4 text-foreground">Total Sales</h3>
+    <div className="bg-[#F7F9FB] dark:bg-white/5 p-3 sm:p-5 rounded-2xl h-full flex flex-col border border-border/50 transition-all duration-200 hover:shadow-md group">
+      <h3 className="text-[12px] sm:text-[14px] font-semibold mb-2 sm:mb-4 text-foreground">Total Sales</h3>
       <div className="flex-1 flex flex-col items-center justify-around" style={{ width: '100%', height: '100%' }}>
-        <div className="relative w-[140px] h-[140px] min-h-[140px] mb-2">
+        <div className="relative w-[120px] h-[120px] sm:w-[140px] sm:h-[140px] min-h-[120px] sm:min-h-[140px] mb-2">
           <TotalSalesDonut />
         </div>
         
@@ -147,15 +147,15 @@ export function SalesDonutChart() {
             { color: COLORS.green, label: "Sponsored", value: "$154.02" },
             { color: COLORS.darkGray, label: "E-mail", value: "$48.96" }
           ].map((item, i) => (
-             <div key={i} className="flex items-center justify-between text-xs group/item transition-all duration-200 hover:bg-black/5 dark:hover:bg-white/5 p-1 rounded-md -mx-1">
-              <div className="flex items-center gap-2">
+             <div key={i} className="flex items-center justify-between text-[10px] sm:text-xs group/item transition-all duration-200 hover:bg-black/5 dark:hover:bg-white/5 p-1 rounded-md -mx-1">
+              <div className="flex items-center gap-1.5 sm:gap-2 overflow-hidden">
                 <div 
-                  className="w-2 h-2 rounded-full ring-2 ring-transparent transition-all duration-200 group-hover/item:ring-offset-1 group-hover/item:scale-110" 
+                  className="w-1.5 h-1.5 sm:w-2 sm:h-2 shrink-0 rounded-full ring-2 ring-transparent transition-all duration-200 group-hover/item:ring-offset-1 group-hover/item:scale-110" 
                   style={{ backgroundColor: item.color }} 
                 />
-                <span className="text-foreground">{item.label}</span>
+                <span className="text-foreground truncate">{item.label}</span>
               </div>
-              <span className="font-medium">{item.value}</span>
+              <span className="font-medium shrink-0 ml-2">{item.value}</span>
             </div>
           ))}
         </div>
