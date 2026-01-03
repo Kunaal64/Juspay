@@ -50,7 +50,7 @@ export default function App() {
   }, [isMobile, setLeftSidebarVisible, setRightSidebarVisible])
 
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
       <main className="flex min-h-screen bg-background font-sans antialiased relative overflow-hidden">
         
         {/* Left Sidebar Overlay (Mobile) */}
