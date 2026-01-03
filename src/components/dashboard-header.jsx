@@ -54,7 +54,7 @@ export function DashboardHeader({ toggleLeftSidebar, toggleRightSidebar, view = 
           <input
             type="text"
             placeholder="Search"
-            className="h-8 w-[160px] bg-secondary/50 rounded-lg pl-9 pr-3 text-[13px] border-none focus:ring-1 focus:ring-accent transition-all outline-none text-foreground placeholder:text-muted-foreground/40"
+            className="h-8 w-[160px] bg-black/5 dark:bg-white/5 rounded-lg pl-9 pr-3 text-[13px] border-none focus:ring-1 focus:ring-accent transition-all outline-none text-foreground placeholder:text-muted-foreground/40"
           />
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
             <span className="text-[10px] text-muted-foreground/30">⌘/</span>
