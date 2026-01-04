@@ -104,9 +104,7 @@
     background: var(--muted-foreground);
 }
 
-/* ============================================
-   ANIMATION KEYFRAMES
-   ============================================ */
+/*ANIMATION KEYFRAMES*/
 
 @keyframes fadeIn {
     from {
@@ -222,9 +220,7 @@
     }
 }
 
-/* ============================================
-   ANIMATION UTILITY CLASSES
-   ============================================ */
+/*ANIMATION UTILITY CLASSES*/
 
 .animate-fade-in {
     animation: fadeIn 0.3s ease-out forwards;
@@ -294,9 +290,7 @@
     opacity: 0;
 }
 
-/* ============================================
-   INTERACTIVE MICROINTERACTIONS
-   ============================================ */
+/*INTERACTIVE MICROINTERACTIONS*/
 
 /* GPU-accelerated transitions for smooth performance */
 .gpu-accelerated {
@@ -360,9 +354,7 @@
     box-shadow: 0 0 20px rgba(168, 197, 218, 0.15);
 }
 
-/* ============================================
-   TRANSITION UTILITIES
-   ============================================ */
+/*TRANSITION UTILITIES*/
 
 .transition-fast {
     transition: all 0.15s ease;
@@ -386,9 +378,7 @@
     transition: transform 0.2s ease;
 }
 
-/* ============================================
-   ACCESSIBILITY
-   ============================================ */
+/*ACCESSIBILITY*/
 
 /* Reduce motion for users who prefer it */
 @media (prefers-reduced-motion: reduce) {

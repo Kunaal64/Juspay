@@ -1,6 +1,5 @@
 /**
- * Comprehensive order management table with filtering, searching, sorting, and pagination.
- * Uses memoization for performance optimization on large datasets.
+ * order list table with filtering, searching, sorting, and pagination.
  */
 
 import { useState, useMemo, useCallback, memo } from "react"
@@ -20,9 +19,7 @@ import {
 } from "lucide-react"
 import { cn, usePersistentState } from "@/lib/utils"
 
-// ============================================
-// CONSTANTS
-// ============================================
+//CONSTANTS
 
 const STATUS_COLORS = {
   "In Progress": "text-[#8A8CD9]",
@@ -63,9 +60,7 @@ const DUMMY_ORDERS = Array.from({ length: 70 }, (_, i) => ({
   status: STATUS_OPTIONS[(i * 7) % 5],
 }))
 
-// ============================================
-// REUSABLE SUB-COMPONENTS
-// ============================================
+//REUSABLE SUB-COMPONENTS
 
 // Generic icon button wrapper with styled states
 const IconButton = memo(function IconButton({ 
@@ -218,9 +213,7 @@ const Pagination = memo(function Pagination({ currentPage, totalPages, onPageCha
   )
 })
 
-// ============================================
-// MAIN COMPONENT
-// ============================================
+//MAIN COMPONENT
 
 export function OrdersList() {
   const [currentPage, setCurrentPage] = usePersistentState('orders_current_page', 1)

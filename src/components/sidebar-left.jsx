@@ -176,7 +176,7 @@ function NavItem({
       className={cn(
         "group flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-all relative",
         "hover:bg-[#1C1C1C]/5 dark:hover:bg-white/5",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+        "focus:outline-none",
         active ? "text-foreground" : "text-foreground hover:text-foreground",
       )}
     >

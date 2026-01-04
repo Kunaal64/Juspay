@@ -1,6 +1,5 @@
 /**
- * Displays revenue breakdown by city using a world map overlay and progress bars.
- * Dots are absolute positioned percentages over the map image.
+ * revenue by location by world map
  */
 export function RevenueByLocation() {
   const locations = [

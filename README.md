@@ -22,7 +22,7 @@
 ### Advanced Data Management (Order List)
 - **Search & Filter**: Real-time search by user name and multi-select filtering by order status.
 - **Sorting**: Sortable columns (Order ID, Username, Date) with direction toggles.
-- **Pagination**: Smart pagination handling large datasets comfortably.
+- **Pagination**: Smart pagination that efficiently breaks down large datasets into manageable chunks, showing a calculated window of page numbers for easy navigation.
 - **Selection**: Row selection capability for bulk actions.
 
 ### State Persistence
